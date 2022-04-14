@@ -24,6 +24,10 @@ function Step1(props) {
     }
   };
 
+  function hapticFeedback() {
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+  }
+
   const onPress = function () {};
   return (
     <View>
@@ -73,6 +77,7 @@ function Step1(props) {
             returnKeyType="done"
             textAlign="center"
             maxLength={3}
+            icon={require("../assets/icons/ic_weight.png")}
             onChangeText={(value) => setWeight(value)}
             sufix="Kg"
           >
@@ -88,6 +93,7 @@ function Step1(props) {
             returnKeyType="done"
             textAlign="center"
             maxLength={3}
+            icon={require("../assets/icons/ic_cake.png")}
             onChangeText={(value) => setAge(value)}
             sufix="anos"
           >

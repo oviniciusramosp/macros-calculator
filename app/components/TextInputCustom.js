@@ -1,21 +1,37 @@
-import React, { useState } from "react";
-import { TextInput, StyleSheet, View, Text, Image } from "react-native";
+import React, { useState, useRef } from "react";
+import {
+  TextInput,
+  StyleSheet,
+  View,
+  Text,
+  Image,
+  TouchableOpacity,
+} from "react-native";
 import colors from "../config/colors";
 
 function TextInputCustom({ children, icon, sufix, ...otherProps }) {
-  const [text, onChangeText] = useState("Useless Text");
-  const [number, onChangeNumber] = useState();
+  const [content, onChangeContent] = useState();
   const [isActive, setActive] = useState(false);
+  const textInputContent = useRef();
+
+  function focusInput() {
+    textInputContent.current.focus();
+  }
 
   return (
-    <View style={styles.inputWithLabel}>
+    <TouchableOpacity
+      style={styles.inputWithLabel}
+      onPress={focusInput}
+      activeOpacity={1}
+    >
       <Text style={styles.label}>{children}</Text>
       <View style={styles.input}>
         {icon && <Image style={styles.icon} source={icon} />}
         <TextInput
           style={styles.inputText}
-          onChangeText={onChangeNumber}
-          value={number}
+          onChangeText={onChangeContent}
+          ref={textInputContent}
+          value={content}
           maxLength={3}
           {...otherProps}
           // onFocus={() => setActive(true)}
@@ -23,7 +39,7 @@ function TextInputCustom({ children, icon, sufix, ...otherProps }) {
 
         {sufix && <Text>{sufix}</Text>}
       </View>
-    </View>
+    </TouchableOpacity>
   );
 }
 
