@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { StyleSheet, View } from "react-native";
+import { StyleSheet, View, Text } from "react-native";
 
 import * as Haptics from "expo-haptics";
 
@@ -11,16 +11,20 @@ import Header from "../components/Header";
 
 function Step1(props) {
   const [gender, setGender] = useState("none");
+  const [height, setHeight] = useState(160);
+  const [weight, setWeight] = useState(70);
+  const [age, setAge] = useState(25);
 
   const setToggleGender = function (genderValue) {
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
-    gender === genderValue ? setGender("none") : setGender(genderValue);
+    if (gender === genderValue) {
+      setGender("none");
+    } else {
+      setGender(genderValue);
+    }
   };
 
-  const onPress = function () {
-    console.log("2");
-  };
-
+  const onPress = function () {};
   return (
     <View>
       {/* Gender */}
@@ -49,20 +53,28 @@ function Step1(props) {
         <Header>Suas Medidas</Header>
         <View style={styles.toggles}>
           <TextInputCustom
-            placeholder="000 cm"
+            placeholder="000"
             keyboardType="numeric"
+            defaultValue={height.toString()}
+            maxLength={3}
             returnKeyType="done"
             textAlign="center"
             icon={require("../assets/icons/ic_height.png")}
+            onChangeText={(value) => setHeight(value)}
+            sufix="cm"
           >
             Altura
           </TextInputCustom>
           <View style={styles.margin} />
           <TextInputCustom
-            placeholder="000 Kg"
+            placeholder="000"
+            defaultValue={weight.toString()}
             keyboardType="numeric"
             returnKeyType="done"
             textAlign="center"
+            maxLength={3}
+            onChangeText={(value) => setWeight(value)}
+            sufix="Kg"
           >
             Peso
           </TextInputCustom>
@@ -70,22 +82,33 @@ function Step1(props) {
         <View style={styles.margin} />
         <View style={styles.toggles}>
           <TextInputCustom
-            placeholder="00 anos"
+            placeholder="00"
+            defaultValue={age.toString()}
             keyboardType="numeric"
             returnKeyType="done"
             textAlign="center"
+            maxLength={3}
+            onChangeText={(value) => setAge(value)}
+            sufix="anos"
           >
             Idade
           </TextInputCustom>
           <View style={styles.margin} />
-          <TextInputCustom></TextInputCustom>
+          <View style={styles.whiteSpace} />
         </View>
       </Card>
       {/* Taxa Metabólica Basal */}
       <Card>
         <Header>Taxa Metabólica Basal</Header>
+        <Text>
+          {gender === "female"
+            ? Math.round(655.1 + 9.563 * weight + 1.85 * height - 4.676 * age)
+            : gender === "male"
+            ? Math.round(66.5 + 13.75 * weight + 5.003 * height - 6.75 * age)
+            : "Selecione um Gênero"}
+        </Text>
       </Card>
-      <ButtonLarge onPress={onPress} isEmoji={true}>
+      <ButtonLarge onPress={onPress()} isEmoji={true}>
         Calcular
       </ButtonLarge>
       <View style={styles.margin} />
@@ -101,6 +124,9 @@ const styles = StyleSheet.create({
   margin: {
     height: 24,
     width: 24,
+  },
+  whiteSpace: {
+    flex: 1,
   },
 });
 

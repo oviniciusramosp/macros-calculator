@@ -2,9 +2,9 @@ import React, { useState } from "react";
 import { TextInput, StyleSheet, View, Text, Image } from "react-native";
 import colors from "../config/colors";
 
-function TextInputCustom({ children, icon, ...otherProps }) {
-  const [text, onChangeText] = React.useState("Useless Text");
-  const [number, onChangeNumber] = React.useState(null);
+function TextInputCustom({ children, icon, sufix, ...otherProps }) {
+  const [text, onChangeText] = useState("Useless Text");
+  const [number, onChangeNumber] = useState();
   const [isActive, setActive] = useState(false);
 
   return (
@@ -20,6 +20,8 @@ function TextInputCustom({ children, icon, ...otherProps }) {
           {...otherProps}
           // onFocus={() => setActive(true)}
         />
+
+        {sufix && <Text>{sufix}</Text>}
       </View>
     </View>
   );
@@ -35,12 +37,12 @@ const styles = StyleSheet.create({
   },
   inputText: {
     color: colors.grayDark,
-    paddingRight: 12,
+    paddingRight: 4,
     alignItems: "center",
     justifyContent: "center",
-    flex: 1,
     fontSize: 16,
     height: 52,
+    marginLeft: 12,
   },
   inputWithLabel: {
     flex: 1,
