@@ -29,7 +29,7 @@ const styles = StyleSheet.create({
   },
   buttonEmojiLabel: {
     color: colors.white,
-    fontSize: 24,
+    fontSize: 30,
     fontWeight: "600",
   },
 });

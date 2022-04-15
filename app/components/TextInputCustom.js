@@ -8,6 +8,7 @@ import {
   TouchableOpacity,
 } from "react-native";
 import colors from "../config/colors";
+import * as Haptics from "expo-haptics";
 
 function TextInputCustom({ children, icon, sufix, ...otherProps }) {
   const [content, onChangeContent] = useState();
@@ -39,7 +40,10 @@ function TextInputCustom({ children, icon, sufix, ...otherProps }) {
           value={content}
           maxLength={3}
           {...otherProps}
-          onFocus={() => setActive(true)}
+          onFocus={() => {
+            Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+            setActive(true);
+          }}
           onBlur={() => setActive(false)}
         />
 

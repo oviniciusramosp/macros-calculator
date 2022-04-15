@@ -1,10 +1,9 @@
 import React, { useState } from "react";
-import { StyleSheet, View, Text } from "react-native";
+import { StyleSheet, View, Text, Alert } from "react-native";
 
 import * as Haptics from "expo-haptics";
 
 import Card from "../components/Card";
-import ButtonLarge from "../components/ButtonLarge";
 import Toggle from "../components/ToggleItem";
 import TextInputCustom from "../components/TextInputCustom";
 import Header from "../components/Header";
@@ -18,7 +17,7 @@ function Step1(props) {
   const [age, setAge] = useState(0);
 
   const setToggleGender = function (genderValue) {
-    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Heavy);
     if (gender === genderValue) {
       setGender("none");
     } else {
@@ -48,7 +47,10 @@ function Step1(props) {
     return "Preencha todos os campos";
   }
 
-  const onPress = function () {};
+  function showAlert(content) {
+    Alert.alert(content);
+  }
+
   return (
     <View>
       {/* Gender */}
@@ -129,7 +131,7 @@ function Step1(props) {
         <Text>{calculate()}</Text>
       </Card>
       <View style={styles.fab}>
-        <FabButtonCustom onPress={onPress()} isEmoji={true}>
+        <FabButtonCustom onPress={() => showAlert("Fab Click")} isEmoji={true}>
           →
         </FabButtonCustom>
       </View>
