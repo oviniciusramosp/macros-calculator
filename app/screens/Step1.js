@@ -31,6 +31,7 @@ function Step1({ navigation }) {
   );
 
   var tMB = 0;
+  var nextButton = true;
 
   const setToggleGender = function (genderValue) {
     if (gender === genderValue) {
@@ -45,6 +46,7 @@ function Step1({ navigation }) {
       return "Selecione um Gênero";
     }
     if (height > 0 && weight > 0 && age > 0) {
+      nextButton = false;
       if (gender === "male") {
         tMB = maleTMB;
         return maleTMB.toString() + " Kcal";
@@ -149,11 +151,11 @@ function Step1({ navigation }) {
           </Card>
           <View style={styles.fab}>
             <FabButtonCustom
-              disabled={true}
+              disabled={nextButton}
               onPress={() =>
                 navigation.navigate("Step 2", {
                   userTMB: tMB,
-                  otherParameter: "test",
+                  userGender: gender,
                 })
               }
               isEmoji={true}

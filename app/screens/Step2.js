@@ -7,11 +7,22 @@ import { StatusBar } from "expo-status-bar";
 import colors from "../config/colors";
 
 function Step2({ route, navigation }) {
-  const { userTMB, otherParameter } = route.params;
+  const { userTMB, userGender } = route.params;
 
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView style={styles.list}>
+        {/* Taxa Metabólica Basal */}
+        <Card>
+          <View style={styles.tbmContent}>
+            <View style={styles.tbmIcon}>
+              <Text style={styles.emojiIcon}>
+                {userGender === "male" ? "🧔‍♂️" : "👩"}
+              </Text>
+            </View>
+            <Text style={styles.tbmLabel}>TMB {userTMB} Kcal</Text>
+          </View>
+        </Card>
         <Card>
           <Header>Step 2</Header>
           <Text>{userTMB}</Text>
@@ -33,6 +44,26 @@ const styles = StyleSheet.create({
   },
   list: {
     padding: 24,
+  },
+  tbmContent: {
+    flex: 1,
+    flexDirection: "row",
+    alignItems: "center",
+  },
+  tbmIcon: {
+    backgroundColor: colors.grayLight,
+    height: 52,
+    width: 52,
+    justifyContent: "center",
+    alignItems: "center",
+    borderRadius: 52,
+    marginRight: 24,
+  },
+  emojiIcon: {
+    fontSize: 24,
+  },
+  tbmLabel: {
+    fontSize: 16,
   },
 });
 
