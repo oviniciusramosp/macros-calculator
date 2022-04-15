@@ -41,7 +41,7 @@ function Step1(props) {
         );
       }
     }
-    return "Preencha todos os campos";
+    return "Preencha os Campos";
   }
 
   function showAlert(content) {
@@ -125,7 +125,12 @@ function Step1(props) {
       {/* Taxa Metabólica Basal */}
       <Card>
         <Header style={styles.tmbHeader}>Taxa Metabólica Basal</Header>
-        <Text>{calculate()}</Text>
+        <View style={styles.tbmContent}>
+          <View style={styles.tbmIcon}>
+            <Text style={styles.emojiIcon}>🔥</Text>
+          </View>
+          <Text style={styles.tbmLabel}>{calculate()}</Text>
+        </View>
       </Card>
       <View style={styles.fab}>
         <FabButtonCustom onPress={() => showAlert("Fab Click")} isEmoji={true}>
@@ -157,6 +162,26 @@ const styles = StyleSheet.create({
   },
   tmbHeader: {
     color: colors.primary,
+  },
+  tbmContent: {
+    flex: 1,
+    flexDirection: "row",
+    alignItems: "center",
+  },
+  tbmIcon: {
+    backgroundColor: colors.grayLight,
+    height: 52,
+    width: 52,
+    justifyContent: "center",
+    alignItems: "center",
+    borderRadius: 52,
+    marginRight: 24,
+  },
+  emojiIcon: {
+    fontSize: 24,
+  },
+  tbmLabel: {
+    fontSize: 16,
   },
 });
 
