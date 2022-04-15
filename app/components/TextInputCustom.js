@@ -25,7 +25,12 @@ function TextInputCustom({ children, icon, sufix, ...otherProps }) {
       activeOpacity={1}
     >
       <Text style={styles.label}>{children}</Text>
-      <View style={styles.input}>
+      <View
+        style={[
+          styles.input,
+          isActive === true ? styles.inputFocus : styles.inpuinputUnfocus,
+        ]}
+      >
         {icon && <Image style={styles.icon} source={icon} />}
         <TextInput
           style={styles.inputText}
@@ -34,7 +39,8 @@ function TextInputCustom({ children, icon, sufix, ...otherProps }) {
           value={content}
           maxLength={3}
           {...otherProps}
-          // onFocus={() => setActive(true)}
+          onFocus={() => setActive(true)}
+          onBlur={() => setActive(false)}
         />
 
         {sufix && <Text>{sufix}</Text>}
@@ -50,6 +56,9 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     paddingLeft: 11,
+    borderWidth: 2,
+    borderColor: colors.grayLight,
+    height: 48,
   },
   inputText: {
     color: colors.grayDark,
@@ -57,9 +66,15 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     fontSize: 16,
-    height: 52,
+    height: "100%",
     marginLeft: 12,
   },
+  inputFocus: {
+    borderWidth: 2,
+    borderColor: colors.primary,
+    height: 48,
+  },
+  inputUnfocus: {},
   inputWithLabel: {
     flex: 1,
     flexDirection: "column",
