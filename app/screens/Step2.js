@@ -7,7 +7,8 @@ function Step2(props) {
   return (
     <View>
       <Card>
-        <Header>Teste</Header>
+        <Header>Step 2</Header>
+        <Text>AAA</Text>
       </Card>
     </View>
   );
