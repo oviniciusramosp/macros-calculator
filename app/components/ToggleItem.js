@@ -1,6 +1,7 @@
 import React from "react";
 import { StyleSheet, TouchableHighlight, Text } from "react-native";
 import colors from "../config/colors";
+import * as Haptics from "expo-haptics";
 
 function ToggleItem(props) {
   return (
@@ -10,6 +11,7 @@ function ToggleItem(props) {
         props.isSelected === true ? styles.selected : null,
       ]}
       onPress={props.onPress}
+      onPressIn={() => Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Heavy)}
       underlayColor={colors.primaryDark}
     >
       <Text style={styles.toggleLabel}>{props.children}</Text>
