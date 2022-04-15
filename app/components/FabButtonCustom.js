@@ -11,7 +11,12 @@ function FabButtonCustom({
 }) {
   return (
     <TouchableHighlight
-      style={styles.button}
+      style={[
+        styles.button,
+        otherProps.disabled === true
+          ? styles.buttonDisabled
+          : styles.buttonEnabled,
+      ]}
       onPress={onPress}
       onPressIn={() => Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Heavy)}
       underlayColor={colors.primaryDark}
@@ -34,6 +39,11 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     borderRadius: 72,
+  },
+  buttonDisabled: {
+    backgroundColor: colors.grayDark,
+    opacity: 0.3,
+    color: colors.grayLight,
   },
   buttonEmojiLabel: {
     color: colors.white,
