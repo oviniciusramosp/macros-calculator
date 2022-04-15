@@ -29,11 +29,6 @@ const styles = StyleSheet.create({
   },
   buttonEmojiLabel: {
     color: colors.white,
-    fontSize: 52,
-    fontWeight: "600",
-  },
-  buttonEmojiLabel: {
-    color: colors.white,
     fontSize: 24,
     fontWeight: "600",
   },
