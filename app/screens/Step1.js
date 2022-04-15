@@ -8,12 +8,14 @@ import ButtonLarge from "../components/ButtonLarge";
 import Toggle from "../components/ToggleItem";
 import TextInputCustom from "../components/TextInputCustom";
 import Header from "../components/Header";
+import FabButtonCustom from "../components/FabButtonCustom";
+import colors from "../config/colors";
 
 function Step1(props) {
   const [gender, setGender] = useState("none");
-  const [height, setHeight] = useState(160);
-  const [weight, setWeight] = useState(70);
-  const [age, setAge] = useState(25);
+  const [height, setHeight] = useState(0);
+  const [weight, setWeight] = useState(0);
+  const [age, setAge] = useState(0);
 
   const setToggleGender = function (genderValue) {
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
@@ -24,8 +26,26 @@ function Step1(props) {
     }
   };
 
-  function hapticFeedback() {
-    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+  function calculate() {
+    if (gender === "none") {
+      return "Selecione um Gênero";
+    }
+    if (height > 0 && weight > 0 && age > 0) {
+      if (gender === "male") {
+        return (
+          Math.round(
+            66.5 + 13.75 * weight + 5.003 * height - 6.75 * age
+          ).toString() + " Kcal"
+        );
+      } else {
+        return (
+          Math.round(
+            655.1 + 9.563 * weight + 1.85 * height - 4.676 * age
+          ).toString() + " Kcal"
+        );
+      }
+    }
+    return "Preencha todos os campos";
   }
 
   const onPress = function () {};
@@ -59,7 +79,7 @@ function Step1(props) {
           <TextInputCustom
             placeholder="000"
             keyboardType="numeric"
-            defaultValue={height.toString()}
+            // defaultValue={height.toString()}
             maxLength={3}
             returnKeyType="done"
             textAlign="center"
@@ -72,7 +92,7 @@ function Step1(props) {
           <View style={styles.margin} />
           <TextInputCustom
             placeholder="000"
-            defaultValue={weight.toString()}
+            // defaultValue={weight.toString()}
             keyboardType="numeric"
             returnKeyType="done"
             textAlign="center"
@@ -88,7 +108,7 @@ function Step1(props) {
         <View style={styles.toggles}>
           <TextInputCustom
             placeholder="00"
-            defaultValue={age.toString()}
+            // defaultValue={age.toString()}
             keyboardType="numeric"
             returnKeyType="done"
             textAlign="center"
@@ -105,18 +125,14 @@ function Step1(props) {
       </Card>
       {/* Taxa Metabólica Basal */}
       <Card>
-        <Header>Taxa Metabólica Basal</Header>
-        <Text>
-          {gender === "female"
-            ? Math.round(655.1 + 9.563 * weight + 1.85 * height - 4.676 * age)
-            : gender === "male"
-            ? Math.round(66.5 + 13.75 * weight + 5.003 * height - 6.75 * age)
-            : "Selecione um Gênero"}
-        </Text>
+        <Header style={styles.tmbHeader}>Taxa Metabólica Basal</Header>
+        <Text>{calculate()}</Text>
       </Card>
-      <ButtonLarge onPress={onPress()} isEmoji={true}>
-        Calcular
-      </ButtonLarge>
+      <View style={styles.fab}>
+        <FabButtonCustom onPress={onPress()} isEmoji={true}>
+          →
+        </FabButtonCustom>
+      </View>
       <View style={styles.margin} />
     </View>
   );
@@ -133,6 +149,15 @@ const styles = StyleSheet.create({
   },
   whiteSpace: {
     flex: 1,
+  },
+  fab: {
+    justifyContent: "center",
+    alignItems: "center",
+    flex: 1,
+    marginBottom: 24,
+  },
+  tmbHeader: {
+    color: colors.primary,
   },
 });
 
