@@ -7,6 +7,7 @@ function FabButtonCustom({
   children,
   onPress,
   isEmoji = false,
+  buttonStyle = "filled",
   ...otherProps
 }) {
   return (
