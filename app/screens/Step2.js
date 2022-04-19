@@ -24,8 +24,17 @@ function Step2({ route, navigation }) {
           </View>
         </Card>
         <Card>
-          <Header>Step 2</Header>
+          <Header>Nível de Atividade</Header>
           <Text>{userTMB}</Text>
+        </Card>
+        <Card>
+          <Header style={styles.tdeeHeader}>Gasto Calórico Diário</Header>
+          <View style={styles.tdeeContent}>
+            <View style={styles.tdeeIcon}>
+              <Text style={styles.emojiIcon}>🔥</Text>
+            </View>
+            <Text style={styles.tdeeLabel}>aaa</Text>
+          </View>
         </Card>
         <FabButtonCustom onPress={() => navigation.goBack()} isEmoji={true}>
           ←
@@ -45,6 +54,9 @@ const styles = StyleSheet.create({
   list: {
     padding: 24,
   },
+  tmbHeader: {
+    color: colors.primary,
+  },
   tbmContent: {
     flex: 1,
     flexDirection: "row",
@@ -59,11 +71,33 @@ const styles = StyleSheet.create({
     borderRadius: 52,
     marginRight: 24,
   },
+  tbmLabel: {
+    fontSize: 18,
+    fontWeight: "600",
+  },
+  tdeeHeader: {
+    color: colors.primary,
+  },
+  tdeeContent: {
+    flex: 1,
+    flexDirection: "row",
+    alignItems: "center",
+  },
+  tdeeIcon: {
+    backgroundColor: colors.grayLight,
+    height: 52,
+    width: 52,
+    justifyContent: "center",
+    alignItems: "center",
+    borderRadius: 52,
+    marginRight: 24,
+  },
   emojiIcon: {
     fontSize: 24,
   },
-  tbmLabel: {
-    fontSize: 16,
+  tdeeLabel: {
+    fontSize: 18,
+    fontWeight: "600",
   },
 });
 

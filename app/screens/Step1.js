@@ -218,7 +218,8 @@ const styles = StyleSheet.create({
     fontSize: 24,
   },
   tbmLabel: {
-    fontSize: 16,
+    fontSize: 18,
+    fontWeight: "600",
   },
 });
 
