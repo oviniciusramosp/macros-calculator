@@ -1,13 +1,15 @@
-import React from "react";
+import React, { useState } from "react";
 import { SafeAreaView, ScrollView, View, Text, StyleSheet } from "react-native";
 import Card from "../components/Card";
 import FabButtonCustom from "../components/FabButtonCustom";
 import Header from "../components/Header";
 import { StatusBar } from "expo-status-bar";
 import colors from "../config/colors";
+import Toggle from "../components/ToggleItem";
 
 function Step2({ route, navigation }) {
   const { userTMB, userGender } = route.params;
+  const [activityLevel, setActivityLevel] = useState("male");
 
   return (
     <SafeAreaView style={styles.container}>
@@ -16,24 +18,40 @@ function Step2({ route, navigation }) {
         <Card>
           <View style={styles.tbmContent}>
             <View style={styles.tbmIcon}>
-              <Text style={styles.emojiIcon}>
-                {userGender === "male" ? "🧔‍♂️" : "👩"}
-              </Text>
+              <Text style={styles.emojiIcon}>←</Text>
             </View>
             <Text style={styles.tbmLabel}>TMB {userTMB} Kcal</Text>
           </View>
         </Card>
         <Card>
           <Header>Nível de Atividade</Header>
-          <Text>{userTMB}</Text>
+          <View style={styles.row}>
+            <Toggle
+              onPress={() => setActivityLevel("male")}
+              isEmoji={false}
+              isSelected={activityLevel === "male" ? true : false}
+            >
+              Exercícios
+            </Toggle>
+            <View style={styles.margin} />
+            <Toggle
+              onPress={() => setActivityLevel("female")}
+              isEmoji={false}
+              isSelected={activityLevel === "female" ? true : false}
+            >
+              Calorias
+            </Toggle>
+          </View>
         </Card>
         <Card>
           <Header style={styles.tdeeHeader}>Gasto Calórico Diário</Header>
           <View style={styles.tdeeContent}>
             <View style={styles.tdeeIcon}>
-              <Text style={styles.emojiIcon}>🔥</Text>
+              <Text style={styles.emojiIcon}>
+                {userGender === "male" ? "🧔‍♂️" : "👩"}
+              </Text>
             </View>
-            <Text style={styles.tdeeLabel}>aaa</Text>
+            <Text style={styles.tdeeLabel}>{userTMB}</Text>
           </View>
         </Card>
         <FabButtonCustom onPress={() => navigation.goBack()} isEmoji={true}>
@@ -53,6 +71,14 @@ const styles = StyleSheet.create({
   },
   list: {
     padding: 24,
+  },
+  row: {
+    flex: 1,
+    flexDirection: "row",
+  },
+  margin: {
+    height: 24,
+    width: 12,
   },
   tmbHeader: {
     color: colors.primary,
