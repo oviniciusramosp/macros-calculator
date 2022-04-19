@@ -3,13 +3,25 @@ import { StyleSheet, TouchableHighlight, Text } from "react-native";
 import colors from "../config/colors";
 import * as Haptics from "expo-haptics";
 
-function FabButtonCustom({ children, onPress, isEmoji = false }) {
+function FabButtonCustom({
+  children,
+  onPress,
+  isEmoji = false,
+  buttonStyle = "filled",
+  ...otherProps
+}) {
   return (
     <TouchableHighlight
-      style={styles.button}
+      style={[
+        styles.button,
+        otherProps.disabled === true
+          ? styles.buttonDisabled
+          : styles.buttonEnabled,
+      ]}
       onPress={onPress}
       onPressIn={() => Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Heavy)}
       underlayColor={colors.primaryDark}
+      {...otherProps}
     >
       <Text
         style={(isEmoji = true ? styles.buttonEmojiLabel : styles.buttonLabel)}
@@ -28,6 +40,11 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     borderRadius: 72,
+  },
+  buttonDisabled: {
+    backgroundColor: colors.grayDark,
+    opacity: 0.3,
+    color: colors.grayLight,
   },
   buttonEmojiLabel: {
     color: colors.white,

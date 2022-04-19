@@ -1,27 +1,36 @@
 import React from "react";
-import { StatusBar } from "expo-status-bar";
-import { StyleSheet, SafeAreaView, ScrollView } from "react-native";
+import { StyleSheet, View } from "react-native";
 
-import colors from "./app/config/colors";
 import Step1 from "./app/screens/Step1";
+import Step2 from "./app/screens/Step2";
+
+import { NavigationContainer } from "@react-navigation/native";
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
+
+const Stack = createNativeStackNavigator();
 
 export default function App() {
   return (
-    <SafeAreaView style={styles.container}>
-      <ScrollView style={styles.list}>
-        <Step1 />
-      </ScrollView>
-      <StatusBar style="auto" />
-    </SafeAreaView>
+    <NavigationContainer>
+      <Stack.Navigator>
+        <Stack.Screen
+          name="Step 1"
+          component={Step1}
+          options={{
+            headerShown: false,
+            headerBlurEffect: true,
+          }}
+        />
+        <Stack.Screen
+          name="Step 2"
+          component={Step2}
+          options={{
+            headerShown: false,
+          }}
+        />
+      </Stack.Navigator>
+    </NavigationContainer>
   );
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: colors.grayLight,
-  },
-  list: {
-    padding: 24,
-  },
-});
+const styles = StyleSheet.create({});

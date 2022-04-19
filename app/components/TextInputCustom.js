@@ -60,9 +60,9 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     paddingLeft: 11,
-    borderWidth: 2,
+    borderWidth: 3,
     borderColor: colors.grayLight,
-    height: 48,
+    height: 52,
   },
   inputText: {
     color: colors.grayDark,
@@ -74,9 +74,7 @@ const styles = StyleSheet.create({
     marginLeft: 12,
   },
   inputFocus: {
-    borderWidth: 2,
     borderColor: colors.primary,
-    height: 48,
   },
   inputUnfocus: {},
   inputWithLabel: {

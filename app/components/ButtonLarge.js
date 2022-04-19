@@ -2,12 +2,13 @@ import React from "react";
 import { StyleSheet, TouchableHighlight, Text } from "react-native";
 import colors from "../config/colors";
 
-function ButtonLarge({ children, onPress, isEmoji = false }) {
+function ButtonLarge({ children, onPress, isEmoji = false, ...otherProps }) {
   return (
     <TouchableHighlight
       style={styles.button}
       onPress={onPress}
       underlayColor={colors.primaryDark}
+      {...otherProps}
     >
       <Text
         style={(isEmoji = true ? styles.buttonEmojiLabel : styles.buttonLabel)}
