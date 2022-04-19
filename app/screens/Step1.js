@@ -70,7 +70,7 @@ function Step1({ navigation }) {
           {/* Gender */}
           <Card>
             <Header>Selecione seu Gênero</Header>
-            <View style={styles.toggles}>
+            <View style={styles.row}>
               <Toggle
                 onPress={() => setToggleGender("male")}
                 isEmoji={true}
@@ -91,7 +91,7 @@ function Step1({ navigation }) {
           {/* Medidas */}
           <Card>
             <Header>Suas Medidas</Header>
-            <View style={styles.toggles}>
+            <View style={styles.row}>
               <TextInputCustom
                 placeholder="000"
                 keyboardType="numeric"
@@ -121,7 +121,7 @@ function Step1({ navigation }) {
               </TextInputCustom>
             </View>
             <View style={styles.margin} />
-            <View style={styles.toggles}>
+            <View style={styles.row}>
               <TextInputCustom
                 placeholder="00"
                 // defaultValue={age.toString()}
@@ -180,13 +180,13 @@ const styles = StyleSheet.create({
   list: {
     padding: 24,
   },
-  toggles: {
+  row: {
     flex: 1,
     flexDirection: "row",
   },
   margin: {
     height: 24,
-    width: 24,
+    width: 12,
   },
   whiteSpace: {
     flex: 1,
