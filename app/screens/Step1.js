@@ -141,7 +141,7 @@ function Step1({ navigation }) {
           </Card>
           {/* Taxa Metabólica Basal */}
           <Card>
-            <Header style={styles.tmbHeader}>Taxa Metabólica Basal</Header>
+            <Header style={styles.colorPrimary}>Taxa Metabólica Basal</Header>
             <View style={styles.tbmContent}>
               <View style={styles.tbmIcon}>
                 <Text style={styles.emojiIcon}>🔥</Text>
@@ -197,7 +197,7 @@ const styles = StyleSheet.create({
     flex: 1,
     marginBottom: 24,
   },
-  tmbHeader: {
+  colorPrimary: {
     color: colors.primary,
   },
   tbmContent: {
