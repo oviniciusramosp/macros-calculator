@@ -8,12 +8,14 @@ function FabButtonCustom({
   onPress,
   isEmoji = false,
   buttonStyle = "filled",
+  size = "default",
   ...otherProps
 }) {
   return (
     <TouchableHighlight
       style={[
         styles.button,
+        size === "small" ? styles.small : null,
         otherProps.disabled === true
           ? styles.buttonDisabled
           : styles.buttonEnabled,
@@ -24,7 +26,10 @@ function FabButtonCustom({
       {...otherProps}
     >
       <Text
-        style={(isEmoji = true ? styles.buttonEmojiLabel : styles.buttonLabel)}
+        style={[
+          (isEmoji = true ? styles.buttonEmojiLabel : styles.null),
+          size === "small" ? styles.smallLabel : null,
+        ]}
       >
         {children}
       </Text>
@@ -41,6 +46,10 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     borderRadius: 72,
   },
+  small: {
+    height: 52,
+    width: 52,
+  },
   buttonDisabled: {
     backgroundColor: colors.grayDark,
     opacity: 0.3,
@@ -50,6 +59,9 @@ const styles = StyleSheet.create({
     color: colors.white,
     fontSize: 30,
     fontWeight: "600",
+  },
+  smallLabel: {
+    fontSize: 22,
   },
 });
 

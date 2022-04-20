@@ -17,10 +17,16 @@ function Step2({ route, navigation }) {
         {/* Taxa Metabólica Basal */}
         <Card>
           <View style={styles.tbmContent}>
-            <View style={styles.tbmIcon}>
-              <Text style={styles.emojiIcon}>←</Text>
-            </View>
-            <Text style={styles.tbmLabel}>TMB {userTMB} Kcal</Text>
+            <FabButtonCustom
+              onPress={() => navigation.goBack()}
+              isEmoji={true}
+              size="small"
+            >
+              ←
+            </FabButtonCustom>
+            <View style={styles.margin} />
+            <Text style={styles.tbmLabel}>TMB </Text>
+            <Text style={styles.tbmLabel}>{userTMB} Kcal</Text>
           </View>
         </Card>
         <Card>
@@ -54,9 +60,6 @@ function Step2({ route, navigation }) {
             <Text style={styles.tdeeLabel}>{userTMB}</Text>
           </View>
         </Card>
-        <FabButtonCustom onPress={() => navigation.goBack()} isEmoji={true}>
-          ←
-        </FabButtonCustom>
       </ScrollView>
       <StatusBar style="dark" />
     </SafeAreaView>
