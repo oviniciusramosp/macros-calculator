@@ -25,7 +25,7 @@ function TextInputCustom({ children, icon, sufix, ...otherProps }) {
       onPress={focusInput}
       activeOpacity={1}
     >
-      <Text style={styles.label}>{children}</Text>
+      {children && <Text style={styles.label}>{children}</Text>}
       <View
         style={[
           styles.input,
