@@ -10,7 +10,7 @@ import {
 import colors from "../config/colors";
 import * as Haptics from "expo-haptics";
 
-function TextInputCustom({ children, icon, sufix, ...otherProps }) {
+function TextInputCustom({ children, icon, sufix, style, ...otherProps }) {
   const [content, onChangeContent] = useState();
   const [isActive, setActive] = useState(false);
   const textInputContent = useRef();
@@ -21,7 +21,7 @@ function TextInputCustom({ children, icon, sufix, ...otherProps }) {
 
   return (
     <TouchableOpacity
-      style={styles.inputWithLabel}
+      style={[styles.inputWithLabel, style]}
       onPress={focusInput}
       activeOpacity={1}
     >

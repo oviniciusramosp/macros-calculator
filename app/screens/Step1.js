@@ -21,6 +21,8 @@ function Step1({ navigation }) {
   const [height, setHeight] = useState(0);
   const [weight, setWeight] = useState(0);
   const [age, setAge] = useState(0);
+  var tMB = 0;
+  var isNextButtonEnabled = true;
 
   const maleTMB = Math.round(
     66.5 + 13.75 * weight + 5.003 * height - 6.75 * age
@@ -29,9 +31,6 @@ function Step1({ navigation }) {
   const femaleTMB = Math.round(
     655.1 + 9.563 * weight + 1.85 * height - 4.676 * age
   );
-
-  var tMB = 0;
-  var nextButton = true;
 
   const setToggleGender = function (genderValue) {
     if (gender === genderValue) {
@@ -46,13 +45,13 @@ function Step1({ navigation }) {
       return "Selecione um Gênero";
     }
     if (height > 0 && weight > 0 && age > 0) {
-      nextButton = false;
+      isNextButtonEnabled = false;
       if (gender === "male") {
         tMB = maleTMB;
-        return maleTMB.toString() + " Kcal";
+        return maleTMB.toString() + " kcal";
       } else {
         tMB = femaleTMB;
-        return femaleTMB.toString() + " Kcal";
+        return femaleTMB.toString() + " kcal";
       }
     }
     tMB = 0;
@@ -76,7 +75,7 @@ function Step1({ navigation }) {
                 isEmoji={true}
                 isSelected={gender === "male" ? true : false}
               >
-                🧔‍♂️
+                👨
               </Toggle>
               <View style={styles.margin} />
               <Toggle
@@ -94,7 +93,7 @@ function Step1({ navigation }) {
             <View style={styles.row}>
               <TextInputCustom
                 placeholder="000"
-                keyboardType="numeric"
+                keyboardType="number-pad"
                 // defaultValue={height.toString()}
                 maxLength={3}
                 returnKeyType="done"
@@ -109,7 +108,7 @@ function Step1({ navigation }) {
               <TextInputCustom
                 placeholder="000"
                 // defaultValue={weight.toString()}
-                keyboardType="numeric"
+                keyboardType="number-pad"
                 returnKeyType="done"
                 textAlign="center"
                 maxLength={3}
@@ -125,11 +124,11 @@ function Step1({ navigation }) {
               <TextInputCustom
                 placeholder="00"
                 // defaultValue={age.toString()}
-                keyboardType="numeric"
+                keyboardType="number-pad"
                 returnKeyType="done"
                 textAlign="center"
                 maxLength={3}
-                icon={require("../assets/icons/ic_cake.png")}
+                icon={require("../assets/icons/ic_cake-alt.png")}
                 onChangeText={(value) => setAge(value)}
                 sufix="anos"
               >
@@ -151,7 +150,7 @@ function Step1({ navigation }) {
           </Card>
           <View style={styles.fab}>
             <FabButtonCustom
-              disabled={nextButton}
+              disabled={isNextButtonEnabled}
               onPress={() =>
                 navigation.navigate("Step 2", {
                   userTMB: tMB,
@@ -175,7 +174,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: colors.grayLight,
-    padding: 24,
   },
   list: {
     padding: 24,

@@ -15,7 +15,7 @@ function ToggleItem({
       style={[styles.button, isSelected === true ? styles.selected : null]}
       onPress={onPress}
       onPressIn={() => Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Heavy)}
-      underlayColor={colors.primaryDark}
+      underlayColor={isSelected ? colors.primaryDark : colors.primaryLight}
       {...otherProps}
     >
       <Text
@@ -52,7 +52,7 @@ const styles = StyleSheet.create({
     backgroundColor: colors.primary,
   },
   unselectedLabel: {
-    color: colors.grayDark,
+    color: colors.primaryFaded,
   },
 });
 
