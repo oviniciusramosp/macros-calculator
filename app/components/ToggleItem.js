@@ -1,7 +1,8 @@
 import React from "react";
-import { StyleSheet, TouchableHighlight, Text } from "react-native";
+import { StyleSheet, TouchableHighlight } from "react-native";
 import colors from "../config/colors";
 import * as Haptics from "expo-haptics";
+import TextCustom from "../components/TextCustom";
 
 function ToggleItem({
   children,
@@ -18,14 +19,15 @@ function ToggleItem({
       underlayColor={isSelected ? colors.primaryDark : colors.primaryLight}
       {...otherProps}
     >
-      <Text
+      <TextCustom
+        fontWeight="Semi Bold"
         style={[
           isEmoji ? styles.toggleEmoji : styles.toggleLabel,
           isSelected ? null : styles.unselectedLabel,
         ]}
       >
         {children}
-      </Text>
+      </TextCustom>
     </TouchableHighlight>
   );
 }

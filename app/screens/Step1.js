@@ -4,17 +4,19 @@ import {
   ScrollView,
   StyleSheet,
   View,
-  Text,
   Alert,
 } from "react-native";
-
+// expo libraries
+import { StatusBar } from "expo-status-bar";
+// styles
+import colors from "../config/colors";
+// custom components
 import Card from "../components/Card";
 import Toggle from "../components/ToggleItem";
 import TextInputCustom from "../components/TextInputCustom";
 import Header from "../components/Header";
 import FabButtonCustom from "../components/FabButtonCustom";
-import colors from "../config/colors";
-import { StatusBar } from "expo-status-bar";
+import TextCustom from "../components/TextCustom";
 
 function Step1({ navigation }) {
   const [gender, setGender] = useState("none");
@@ -143,9 +145,11 @@ function Step1({ navigation }) {
             <Header style={styles.colorPrimary}>Taxa Metabólica Basal</Header>
             <View style={styles.tbmContent}>
               <View style={styles.tbmIcon}>
-                <Text style={styles.emojiIcon}>🔥</Text>
+                <TextCustom style={styles.emojiIcon}>🔥</TextCustom>
               </View>
-              <Text style={styles.tbmLabel}>{calculate()}</Text>
+              <TextCustom fontWeight="Semi Bold" style={styles.tbmLabel}>
+                {calculate()}
+              </TextCustom>
             </View>
           </Card>
           <View style={styles.fab}>

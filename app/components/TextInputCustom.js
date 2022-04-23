@@ -3,12 +3,12 @@ import {
   TextInput,
   StyleSheet,
   View,
-  Text,
   Image,
   TouchableOpacity,
 } from "react-native";
 import colors from "../config/colors";
 import * as Haptics from "expo-haptics";
+import TextCustom from "../components/TextCustom";
 
 function TextInputCustom({ children, icon, sufix, style, ...otherProps }) {
   const [content, onChangeContent] = useState();
@@ -25,7 +25,11 @@ function TextInputCustom({ children, icon, sufix, style, ...otherProps }) {
       onPress={focusInput}
       activeOpacity={1}
     >
-      {children && <Text style={styles.label}>{children}</Text>}
+      {children && (
+        <TextCustom fontWeight="Semi Bold" style={styles.label}>
+          {children}
+        </TextCustom>
+      )}
       <View
         style={[
           styles.input,
@@ -47,7 +51,7 @@ function TextInputCustom({ children, icon, sufix, style, ...otherProps }) {
           onBlur={() => setActive(false)}
         />
 
-        {sufix && <Text>{sufix}</Text>}
+        {sufix && <TextCustom>{sufix}</TextCustom>}
       </View>
     </TouchableOpacity>
   );
@@ -87,6 +91,7 @@ const styles = StyleSheet.create({
     lineHeight: 16,
     marginBottom: 6,
     color: colors.grayDark,
+    letterSpacing: -0.5,
   },
   icon: {
     height: 30,

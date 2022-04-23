@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { SafeAreaView, ScrollView, View, Text, StyleSheet } from "react-native";
+import { SafeAreaView, ScrollView, View, StyleSheet } from "react-native";
 import Card from "../components/Card";
 import FabButtonCustom from "../components/FabButtonCustom";
 import Header from "../components/Header";
@@ -7,6 +7,7 @@ import { StatusBar } from "expo-status-bar";
 import colors from "../config/colors";
 import Toggle from "../components/ToggleItem";
 import TextInputCustom from "../components/TextInputCustom";
+import TextCustom from "../components/TextCustom";
 
 function Step2({ route, navigation }) {
   const { userTMB, userGender } = route.params;
@@ -83,8 +84,15 @@ function Step2({ route, navigation }) {
             </FabButtonCustom>
             <View style={styles.margin} />
             <View style={styles.margin} />
-            <Text style={[styles.tbmLabel, styles.colorPrimary]}>TMB </Text>
-            <Text style={styles.tbmLabel}>{userTMB} kcal</Text>
+            <TextCustom
+              fontWeight="Semi Bold"
+              style={[styles.tbmLabel, styles.colorPrimary]}
+            >
+              TMB{" "}
+            </TextCustom>
+            <TextCustom fontWeight="Semi Bold" style={styles.tbmLabel}>
+              {userTMB} kcal
+            </TextCustom>
           </View>
         </Card>
         <Card>
@@ -106,11 +114,11 @@ function Step2({ route, navigation }) {
               Calorias
             </Toggle>
           </View>
-          <Text style={styles.activityLabel}>
+          <TextCustom style={styles.activityLabel}>
             {activityLevel == "exercises"
               ? "Insira o número de vezes que você se exercita durante a semana."
               : "Insira a quantidade média de calorias que você queima em atividade por dia."}
-          </Text>
+          </TextCustom>
           <TextInputCustom
             placeholder="0"
             keyboardType="number-pad"
@@ -144,9 +152,11 @@ function Step2({ route, navigation }) {
           <Header style={styles.colorPrimary}>Gasto Calórico Diário</Header>
           <View style={styles.tdeeContent}>
             <View style={styles.tdeeIcon}>
-              <Text style={styles.emojiIcon}>{tdeeIcon()}</Text>
+              <TextCustom style={styles.emojiIcon}>{tdeeIcon()}</TextCustom>
             </View>
-            <Text style={styles.tdeeLabel}>{calculateTDEE()}</Text>
+            <TextCustom fontWeight="Semi Bold" style={styles.tdeeLabel}>
+              {calculateTDEE()}
+            </TextCustom>
           </View>
         </Card>
         <View style={styles.fab}>

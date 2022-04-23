@@ -2,21 +2,28 @@ import React from "react";
 import { StyleSheet, Text } from "react-native";
 import colors from "../config/colors";
 
+import TextCustom from "../components/TextCustom";
+
 function Header({ children, style, ...otherProps }) {
   return (
-    <Text style={[styles.header, style]} {...otherProps}>
+    <TextCustom
+      fontWeight="Semi Bold"
+      style={[styles.header, style]}
+      {...otherProps}
+    >
       {children}
-    </Text>
+    </TextCustom>
   );
 }
 
 const styles = StyleSheet.create({
   header: {
     fontSize: 24,
-    fontWeight: "700",
     marginBottom: 16,
     lineHeight: 28,
     color: colors.grayDark,
+    fontWeight: "700",
+    letterSpacing: -0.7,
   },
 });
 

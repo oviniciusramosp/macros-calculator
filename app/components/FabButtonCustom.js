@@ -2,8 +2,7 @@ import React from "react";
 import { StyleSheet, TouchableHighlight, Text } from "react-native";
 import colors from "../config/colors";
 import * as Haptics from "expo-haptics";
-import { backgroundColor } from "react-native/Libraries/Components/View/ReactNativeStyleAttributes";
-import { clickProps } from "react-native-web/dist/cjs/modules/forwardedProps";
+import TextCustom from "../components/TextCustom";
 
 function FabButtonCustom({
   children,
@@ -31,7 +30,8 @@ function FabButtonCustom({
       }
       {...otherProps}
     >
-      <Text
+      <TextCustom
+        fontWeight="Semi Bold"
         style={[
           (isEmoji = true ? styles.buttonEmojiLabel : styles.null),
           size === "small" ? styles.smallLabel : null,
@@ -39,7 +39,7 @@ function FabButtonCustom({
         ]}
       >
         {children}
-      </Text>
+      </TextCustom>
     </TouchableHighlight>
   );
 }
