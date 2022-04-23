@@ -16,11 +16,11 @@ function Step2({ route, navigation }) {
   const [caloriesPerDay, setCaloriesPerDay] = useState(0);
 
   var tdee = 0;
-  var isNextButtonEnabled = true;
+  var isNextButtonDisabled = true;
 
   function calculateTDEE() {
     if (activityLevel == "exercises") {
-      tdee = 0;
+      isNextButtonDisabled = false;
       if (exercisesPerWeek <= 1) {
         tdee = Math.round(userTMB * 1.2);
         return tdee.toString() + " kcal";
@@ -50,8 +50,11 @@ function Step2({ route, navigation }) {
       }
     }
     if (activityLevel == "calories") {
+      isNextButtonDisabled = false;
       tdee = Math.round(userTMB * 1.1 + caloriesPerDay * 1);
       return tdee.toString() + " kcal";
+    } else {
+      isNextButtonDisabled = true;
     }
   }
 
@@ -161,8 +164,13 @@ function Step2({ route, navigation }) {
         </Card>
         <View style={styles.fab}>
           <FabButtonCustom
-            disabled={isNextButtonEnabled}
-            onPress={() => navigation.navigate("Step 2", {})}
+            disabled={isNextButtonDisabled}
+            onPress={() =>
+              navigation.navigate("Step 3", {
+                userTDEE: tdee,
+                userTMB: userTMB,
+              })
+            }
             isEmoji={true}
           >
             →

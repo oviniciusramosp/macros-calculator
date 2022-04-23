@@ -24,7 +24,7 @@ function Step1({ navigation }) {
   const [weight, setWeight] = useState(0);
   const [age, setAge] = useState(0);
   var tMB = 0;
-  var isNextButtonEnabled = true;
+  var isNextButtonDisabled = true;
 
   const maleTMB = Math.round(
     66.5 + 13.75 * weight + 5.003 * height - 6.75 * age
@@ -47,7 +47,7 @@ function Step1({ navigation }) {
       return "Selecione um Gênero";
     }
     if (height > 0 && weight > 0 && age > 0) {
-      isNextButtonEnabled = false;
+      isNextButtonDisabled = false;
       if (gender === "male") {
         tMB = maleTMB;
         return maleTMB.toString() + " kcal";
@@ -154,7 +154,7 @@ function Step1({ navigation }) {
           </Card>
           <View style={styles.fab}>
             <FabButtonCustom
-              disabled={isNextButtonEnabled}
+              disabled={isNextButtonDisabled}
               onPress={() =>
                 navigation.navigate("Step 2", {
                   userTMB: tMB,
