@@ -4,6 +4,7 @@ export default {
   primaryDark: "#201E5F",
   primaryFaded: "#8C7F8E",
   white: "#fff",
+  black: "#000",
   grayLight: "#F2F2F5",
   grayDark: "#222222",
 };
