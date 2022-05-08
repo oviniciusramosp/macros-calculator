@@ -11,10 +11,10 @@ import PickerCustom from "../components/Picker/PickerCustom";
 
 function Step3({ route, navigation }) {
   const { userTDEE, userTMB } = route.params;
+  const [pickerStatusSelection, setPickerStatusSelection] = useState(0);
+  const [pickerGoalSelection, setPickerGoalSelection] = useState(0);
 
-  var isNextButtonDisabled = true;
-
-  const pickerOptions = [
+  const pickerStatusOptions = [
     {
       id: "1",
       label: "Pouca Gordura e Pouca Massa Magra",
@@ -37,9 +37,7 @@ function Step3({ route, navigation }) {
     },
   ];
 
-  var pickerSelection = 0;
-
-  const goalOptions = [
+  const pickerGoalOptions = [
     {
       id: "1",
       label: "Definir Défict Específico",
@@ -76,8 +74,6 @@ function Step3({ route, navigation }) {
       icon: require("../assets/icons/ic_height.png"),
     },
   ];
-
-  var goalSelection = 0;
 
   return (
     <SafeAreaView style={styles.container}>
@@ -123,36 +119,70 @@ function Step3({ route, navigation }) {
         <Card>
           <Header>Estado Atual</Header>
           <PickerCustom
-            placeholder="..."
-            options={pickerOptions}
+            placeholder="Selecione seu Estado Atual"
+            options={pickerStatusOptions}
             onChangeSelect={(id) => {
-              pickerSelection = id;
-              alert(pickerSelection);
+              setPickerStatusSelection(id);
             }}
           ></PickerCustom>
         </Card>
         <Card>
           <Header>Objetivo</Header>
           <PickerCustom
-            placeholder="..."
-            options={goalOptions}
+            placeholder="Selecione seu Objetivo"
+            options={pickerGoalOptions}
             onChangeSelect={(id) => {
-              pickerSelection = id;
-              alert(goalSelection);
+              setPickerGoalSelection(id);
+              console.log(pickerGoalSelection);
             }}
-          ></PickerCustom>
+          />
+          {pickerGoalSelection == 7 ? (
+            <TextInputCustom
+              placeholder="0"
+              keyboardType="number-pad"
+              maxLength={4}
+              returnKeyType="done"
+              textAlign="center"
+              onChangeText={(value) => value}
+              sufix={"kcal"}
+              style={styles.kcalInput}
+            />
+          ) : null}
+          {pickerGoalSelection == 1 ? (
+            <TextInputCustom
+              placeholder="0"
+              keyboardType="number-pad"
+              maxLength={4}
+              returnKeyType="done"
+              textAlign="center"
+              onChangeText={(value) => value}
+              sufix={"kcal"}
+              style={styles.kcalInput}
+            />
+          ) : null}
         </Card>
+        <View style={styles.margin} />
+      </ScrollView>
+      <View>
         <View style={styles.fab}>
           <FabButtonCustom
-            disabled={isNextButtonDisabled}
-            onPress={() => navigation.navigate("Step 2", {})}
+            disabled={
+              pickerGoalSelection > 0 && pickerStatusSelection > 0
+                ? false
+                : true
+            }
+            onPress={() =>
+              navigation.navigate("Step 4", {
+                status: pickerStatusSelection,
+                goal: pickerGoalSelection,
+              })
+            }
             isEmoji={true}
           >
             →
           </FabButtonCustom>
         </View>
-        <View style={styles.margin} />
-      </ScrollView>
+      </View>
       <StatusBar style="dark" />
     </SafeAreaView>
   );
@@ -216,20 +246,17 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: "600",
   },
-  activityLabel: {
-    textAlign: "center",
-    paddingHorizontal: 10,
-    paddingVertical: 16,
-  },
-  activityInput: {
-    width: 152,
-    alignSelf: "center",
+  kcalInput: {
+    marginTop: 12,
   },
   fab: {
     justifyContent: "center",
     alignItems: "center",
-    flex: 1,
-    marginBottom: 24,
+    width: "100%",
+    padding: 24,
+    position: "absolute",
+    bottom: 0,
+    backgroundColor: "red",
   },
   hide: {
     display: "none",
