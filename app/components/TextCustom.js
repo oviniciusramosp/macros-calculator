@@ -3,6 +3,7 @@ import { StyleSheet, Text } from "react-native";
 
 import { useFonts } from "expo-font";
 import AppLoading from "expo-app-loading";
+import LoadingScreen from "../screens/LoadingScreen";
 
 function TextCustom({
   children,
@@ -16,7 +17,7 @@ function TextCustom({
   });
 
   if (!loaded) {
-    return <AppLoading />;
+    return <LoadingScreen />;
   }
 
   return (
