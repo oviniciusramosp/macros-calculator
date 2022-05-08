@@ -8,6 +8,7 @@ import colors from "../config/colors";
 import TextInputCustom from "../components/TextInputCustom";
 import TextCustom from "../components/TextCustom";
 import PickerCustom from "../components/Picker/PickerCustom";
+import { LinearGradient } from "expo-linear-gradient";
 
 function Step3({ route, navigation }) {
   const { userTDEE, userTMB } = route.params;
@@ -77,7 +78,7 @@ function Step3({ route, navigation }) {
 
   return (
     <SafeAreaView style={styles.container}>
-      <ScrollView style={styles.list}>
+      <ScrollView contentContainerStyle={styles.list}>
         <Card>
           <View style={styles.tbmContent}>
             <FabButtonCustom
@@ -90,27 +91,30 @@ function Step3({ route, navigation }) {
             </FabButtonCustom>
             <View style={styles.margin} />
             <View style={styles.margin} />
-            <View>
-              <View style={styles.row}>
+            <View style={styles.row}>
+              <View style={styles.column}>
                 <TextCustom
                   fontWeight="Semi Bold"
                   style={[styles.tbmLabel, styles.colorPrimary]}
                 >
-                  TMB{" "}
+                  TMB
                 </TextCustom>
-                <TextCustom fontWeight="Semi Bold" style={styles.tbmLabel}>
-                  {userTMB} kcal
+                <TextCustom
+                  fontWeight="Semi Bold"
+                  style={[styles.tbmLabel, styles.colorPrimary]}
+                >
+                  GET
                 </TextCustom>
               </View>
-              <View style={styles.row}>
-                <TextCustom
-                  fontWeight="Semi Bold"
-                  style={[styles.tbmLabel, styles.colorPrimary]}
-                >
-                  GET{" "}
+              <View style={styles.margin} />
+              <View style={styles.caloriesHeader}>
+                <TextCustom fontWeight="Semi Bold" style={styles.tbmLabel}>
+                  {userTMB.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".")}{" "}
+                  kcal
                 </TextCustom>
                 <TextCustom fontWeight="Semi Bold" style={styles.tbmLabel}>
-                  {userTDEE} kcal
+                  {userTDEE.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".")}{" "}
+                  kcal
                 </TextCustom>
               </View>
             </View>
@@ -164,7 +168,11 @@ function Step3({ route, navigation }) {
         <View style={styles.margin} />
       </ScrollView>
       <View>
-        <View style={styles.fab}>
+        <LinearGradient
+          style={styles.fab}
+          colors={colors.grayLightGradient}
+          locations={[0, 0.5]}
+        >
           <FabButtonCustom
             disabled={
               pickerGoalSelection > 0 && pickerStatusSelection > 0
@@ -181,7 +189,7 @@ function Step3({ route, navigation }) {
           >
             →
           </FabButtonCustom>
-        </View>
+        </LinearGradient>
       </View>
       <StatusBar style="dark" />
     </SafeAreaView>
@@ -195,6 +203,7 @@ const styles = StyleSheet.create({
   },
   list: {
     padding: 24,
+    paddingBottom: 72 + 48,
   },
   row: {
     flex: 1,
@@ -203,6 +212,9 @@ const styles = StyleSheet.create({
   margin: {
     height: 24,
     width: 12,
+  },
+  caloriesHeader: {
+    alignItems: "flex-end",
   },
   tbmContent: {
     flex: 1,
@@ -256,7 +268,6 @@ const styles = StyleSheet.create({
     padding: 24,
     position: "absolute",
     bottom: 0,
-    backgroundColor: "red",
   },
   hide: {
     display: "none",

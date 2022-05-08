@@ -8,6 +8,7 @@ import {
 } from "react-native";
 // expo libraries
 import { StatusBar } from "expo-status-bar";
+import { LinearGradient } from "expo-linear-gradient";
 // styles
 import colors from "../config/colors";
 // custom components
@@ -50,10 +51,14 @@ function Step1({ navigation }) {
       isNextButtonDisabled = false;
       if (gender === "male") {
         tMB = maleTMB;
-        return maleTMB.toString() + " kcal";
+        return (
+          maleTMB.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".") + " kcal"
+        );
       } else {
         tMB = femaleTMB;
-        return femaleTMB.toString() + " kcal";
+        return (
+          femaleTMB.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".") + " kcal"
+        );
       }
     }
     tMB = 0;
@@ -66,7 +71,7 @@ function Step1({ navigation }) {
 
   return (
     <SafeAreaView style={styles.container}>
-      <ScrollView style={styles.list}>
+      <ScrollView contentContainerStyle={styles.list}>
         <View>
           {/* Gender */}
           <Card>
@@ -152,23 +157,28 @@ function Step1({ navigation }) {
               </TextCustom>
             </View>
           </Card>
-          <View style={styles.fab}>
-            <FabButtonCustom
-              disabled={isNextButtonDisabled}
-              onPress={() =>
-                navigation.navigate("Step 2", {
-                  userTMB: tMB,
-                  userGender: gender,
-                })
-              }
-              isEmoji={true}
-            >
-              →
-            </FabButtonCustom>
-          </View>
-          <View style={styles.margin} />
         </View>
       </ScrollView>
+      <View>
+        <LinearGradient
+          style={styles.fab}
+          colors={colors.grayLightGradient}
+          locations={[0, 0.5]}
+        >
+          <FabButtonCustom
+            disabled={isNextButtonDisabled}
+            onPress={() =>
+              navigation.navigate("Step 2", {
+                userTMB: tMB,
+                userGender: gender,
+              })
+            }
+            isEmoji={true}
+          >
+            →
+          </FabButtonCustom>
+        </LinearGradient>
+      </View>
       <StatusBar style="dark" />
     </SafeAreaView>
   );
@@ -181,6 +191,7 @@ const styles = StyleSheet.create({
   },
   list: {
     padding: 24,
+    paddingBottom: 72 + 48,
   },
   row: {
     flex: 1,
@@ -196,8 +207,10 @@ const styles = StyleSheet.create({
   fab: {
     justifyContent: "center",
     alignItems: "center",
-    flex: 1,
-    marginBottom: 24,
+    width: "100%",
+    padding: 24,
+    position: "absolute",
+    bottom: 0,
   },
   colorPrimary: {
     color: colors.primary,

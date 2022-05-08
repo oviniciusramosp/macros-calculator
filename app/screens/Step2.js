@@ -8,6 +8,7 @@ import colors from "../config/colors";
 import Toggle from "../components/ToggleItem";
 import TextInputCustom from "../components/TextInputCustom";
 import TextCustom from "../components/TextCustom";
+import { LinearGradient } from "expo-linear-gradient";
 
 function Step2({ route, navigation }) {
   const { userTMB, userGender } = route.params;
@@ -23,27 +24,27 @@ function Step2({ route, navigation }) {
       isNextButtonDisabled = false;
       if (exercisesPerWeek <= 1) {
         tdee = Math.round(userTMB * 1.2);
-        return tdee.toString() + " kcal";
+        return tdee.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".") + " kcal";
       }
       if (exercisesPerWeek >= 2 && exercisesPerWeek <= 3) {
         tdee = Math.round(userTMB * 1.3);
-        return tdee.toString() + " kcal";
+        return tdee.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".") + " kcal";
       }
       if (exercisesPerWeek >= 4 && exercisesPerWeek <= 6) {
         tdee = Math.round(userTMB * 1.42);
-        return tdee.toString() + " kcal";
+        return tdee.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".") + " kcal";
       }
       if (exercisesPerWeek >= 7 && exercisesPerWeek <= 8) {
         tdee = Math.round(userTMB * 1.55);
-        return tdee.toString() + " kcal";
+        return tdee.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".") + " kcal";
       }
       if (exercisesPerWeek >= 9 && exercisesPerWeek <= 10) {
         tdee = Math.round(userTMB * 1.8);
-        return tdee.toString() + " kcal";
+        return tdee.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".") + " kcal";
       }
       if (exercisesPerWeek >= 11 && exercisesPerWeek <= 21) {
         tdee = Math.round(userTMB * 2);
-        return tdee.toString() + " kcal";
+        return tdee.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".") + " kcal";
       }
       if (exercisesPerWeek >= 22) {
         return "Fala sério!";
@@ -73,7 +74,7 @@ function Step2({ route, navigation }) {
 
   return (
     <SafeAreaView style={styles.container}>
-      <ScrollView style={styles.list}>
+      <ScrollView contentContainerStyle={styles.list}>
         {/* Taxa Metabólica Basal */}
         <Card>
           <View style={styles.tbmContent}>
@@ -94,7 +95,7 @@ function Step2({ route, navigation }) {
               TMB{" "}
             </TextCustom>
             <TextCustom fontWeight="Semi Bold" style={styles.tbmLabel}>
-              {userTMB} kcal
+              {userTMB.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".")} kcal
             </TextCustom>
           </View>
         </Card>
@@ -162,7 +163,13 @@ function Step2({ route, navigation }) {
             </TextCustom>
           </View>
         </Card>
-        <View style={styles.fab}>
+      </ScrollView>
+      <View>
+        <LinearGradient
+          style={styles.fab}
+          colors={colors.grayLightGradient}
+          locations={[0, 0.5]}
+        >
           <FabButtonCustom
             disabled={isNextButtonDisabled}
             onPress={() =>
@@ -175,9 +182,8 @@ function Step2({ route, navigation }) {
           >
             →
           </FabButtonCustom>
-        </View>
-        <View style={styles.margin} />
-      </ScrollView>
+        </LinearGradient>
+      </View>
       <StatusBar style="dark" />
     </SafeAreaView>
   );
@@ -190,6 +196,7 @@ const styles = StyleSheet.create({
   },
   list: {
     padding: 24,
+    paddingBottom: 72 + 48,
   },
   row: {
     flex: 1,
@@ -247,14 +254,16 @@ const styles = StyleSheet.create({
     paddingVertical: 16,
   },
   activityInput: {
-    width: 152,
-    alignSelf: "center",
+    // width: 152,
+    // alignSelf: "center",
   },
   fab: {
     justifyContent: "center",
     alignItems: "center",
-    flex: 1,
-    marginBottom: 24,
+    width: "100%",
+    padding: 24,
+    position: "absolute",
+    bottom: 0,
   },
   hide: {
     display: "none",
