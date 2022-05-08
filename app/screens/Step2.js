@@ -53,7 +53,7 @@ function Step2({ route, navigation }) {
     if (activityLevel == "calories") {
       isNextButtonDisabled = false;
       tdee = Math.round(userTMB * 1.1 + caloriesPerDay * 1);
-      return tdee.toString() + " kcal";
+      return tdee.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".") + " kcal";
     } else {
       isNextButtonDisabled = true;
     }
