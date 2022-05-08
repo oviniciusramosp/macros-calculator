@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import {
   StyleSheet,
   View,
@@ -26,78 +26,84 @@ export default function ModalCustom({
 }) {
   const [animationState, setAnimationState] = useState({
     opacity: new Animated.Value(0),
-    container: new Animated.Value(height),
-    modal: new Animated.Value(height),
+    modal: new Animated.Value(0),
+    modalOpacity: new Animated.Value(0.5),
   });
 
-  useEffect(() => {
-    if (visible) {
-      openModal();
-    }
-  }, [visible]);
+  const [modalVisibility, setModalVisibility] = useState(false);
 
   const openModal = () => {
-    console.log("rodou open");
-    console.log(visible);
-    Animated.sequence([
-      Animated.timing(animationState.container, {
-        toValue: 0,
-        duration: 100,
-        useNativeDriver: true,
-      }),
+    setModalVisibility(true);
+    Animated.parallel([
       Animated.timing(animationState.opacity, {
         toValue: 1,
-        duration: 300,
+        duration: 200,
+        useNativeDriver: true,
+      }),
+      Animated.timing(animationState.modalOpacity, {
+        toValue: 1,
+        duration: 150,
         useNativeDriver: true,
       }),
       Animated.spring(animationState.modal, {
-        toValue: 0,
-        bounciness: 5,
+        toValue: 1,
+        bounciness: 8,
         useNativeDriver: true,
       }),
     ]).start();
   };
 
   const closeModal = () => {
-    Animated.sequence([
+    Animated.parallel([
       Animated.timing(animationState.modal, {
-        toValue: height,
+        toValue: 0,
         duration: 250,
         useNativeDriver: true,
       }),
+      Animated.timing(animationState.modalOpacity, {
+        toValue: 0,
+        duration: 150,
+        useNativeDriver: true,
+      }),
       Animated.timing(animationState.opacity, {
-        toValue: 0.9,
+        toValue: 0,
         duration: 300,
         useNativeDriver: true,
       }),
-      Animated.timing(animationState.container, {
-        toValue: height,
-        duration: 100,
-        useNativeDriver: true,
-      }),
     ]).start();
+    setTimeout(() => {
+      setModalVisibility(false);
+    }, 300);
   };
 
+  useEffect(() => {
+    if (visible) {
+      openModal();
+    } else {
+      closeModal();
+    }
+  }, [visible]);
+
   return (
-    <Modal visible={visible} {...otherProps} transparent={true}>
+    <Modal visible={modalVisibility} transparent={true} {...otherProps}>
       <Animated.View
         style={[
           styles.backdrop,
           {
             opacity: animationState.opacity,
-            transform: [{ translateY: animationState.container }],
           },
         ]}
       >
         {/* Close modal on outside press */}
-        <Pressable style={styles.closeArea} onPress={closeModal()} />
+        <Pressable style={styles.closeArea} onPress={closeButtonFunction} />
         {/* Modal Content */}
         <Animated.View
           style={[
             styles.modal,
             style,
             {
-              transform: [{ translateY: animationState.modal }],
+              transform: [{ scale: animationState.modal }],
+              opacity: animationState.modalOpacity,
             },
           ]}
         >
@@ -105,7 +111,7 @@ export default function ModalCustom({
             <View style={header ? styles.hasHeader : styles.noHeader}>
               {header && <Header style={styles.modalHeader}>{header}</Header>}
               {closeButton && (
-                <TouchableOpacity onPress={closeModal()}>
+                <TouchableOpacity onPress={closeButtonFunction}>
                   <Image
                     style={styles.icon}
                     source={require("../assets/icons/ic_fire.png")}
@@ -117,7 +123,7 @@ export default function ModalCustom({
           <View style={styles.content}>{children}</View>
         </Animated.View>
         {/* Close modal on outside press */}
-        <Pressable style={styles.closeArea} onPress={openModal()} />
+        <Pressable style={styles.closeArea} onPress={closeButtonFunction} />
       </Animated.View>
     </Modal>
   );
@@ -125,10 +131,10 @@ export default function ModalCustom({
 
 const styles = StyleSheet.create({
   backdrop: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-    backgroundColor: "rgba(0,0,0,0.2)",
+    height: height,
+    width: width,
+    backgroundColor: "rgba(0,0,0,0.15)",
+    position: "absolute",
   },
   closeArea: {
     flex: 1,

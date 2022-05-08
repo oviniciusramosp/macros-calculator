@@ -40,6 +40,7 @@ export default function PickerCustom({
       />
     );
   }
+
   return (
     <SafeAreaView>
       <TouchableOpacity
@@ -98,6 +99,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     flex: 1,
+    paddingRight: 26,
   },
   pickerLabel: {},
   modalPicker: {
