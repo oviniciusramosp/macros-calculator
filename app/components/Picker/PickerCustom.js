@@ -4,7 +4,6 @@ import {
   SafeAreaView,
   FlatList,
   View,
-  Dimensions,
   Image,
 } from "react-native";
 import React, { useState } from "react";
@@ -12,8 +11,6 @@ import TextCustom from "../TextCustom";
 import colors from "../../config/colors";
 import ModalCustom from "../ModalCustom";
 import PickerItemCustom from "./PickerItemCustom";
-
-const { width } = Dimensions.get("window");
 
 export default function PickerCustom({
   options,
@@ -67,7 +64,6 @@ export default function PickerCustom({
       <ModalCustom
         visible={modalVisible}
         header={modalHeader}
-        animationType="fade"
         onRequestClose={() => setModalVisible(false)}
         closeButton={closeButton}
         closeButtonFunction={() => setModalVisible(false)}
@@ -106,7 +102,6 @@ const styles = StyleSheet.create({
   pickerLabel: {},
   modalPicker: {
     maxHeight: "90%",
-    width: width - 48,
   },
   list: {},
   maginItem: {

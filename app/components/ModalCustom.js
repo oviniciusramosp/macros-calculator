@@ -6,59 +6,136 @@ import {
   TouchableOpacity,
   Image,
   Pressable,
+  Animated,
+  Dimensions,
 } from "react-native";
 import colors from "../config/colors";
 import Header from "./Header";
+
+const { height } = Dimensions.get("window");
+const { width } = Dimensions.get("window");
 
 export default function ModalCustom({
   children,
   style,
   closeButton = true,
   closeButtonFunction,
+  visible,
   header,
   ...otherProps
 }) {
+  const [animationState, setAnimationState] = useState({
+    opacity: new Animated.Value(0),
+    container: new Animated.Value(height),
+    modal: new Animated.Value(height),
+  });
+
+  useEffect(() => {
+    if (visible) {
+      openModal();
+    }
+  }, [visible]);
+
+  const openModal = () => {
+    console.log("rodou open");
+    console.log(visible);
+    Animated.sequence([
+      Animated.timing(animationState.container, {
+        toValue: 0,
+        duration: 100,
+        useNativeDriver: true,
+      }),
+      Animated.timing(animationState.opacity, {
+        toValue: 1,
+        duration: 300,
+        useNativeDriver: true,
+      }),
+      Animated.spring(animationState.modal, {
+        toValue: 0,
+        bounciness: 5,
+        useNativeDriver: true,
+      }),
+    ]).start();
+  };
+
+  const closeModal = () => {
+    Animated.sequence([
+      Animated.timing(animationState.modal, {
+        toValue: height,
+        duration: 250,
+        useNativeDriver: true,
+      }),
+      Animated.timing(animationState.opacity, {
+        toValue: 0.9,
+        duration: 300,
+        useNativeDriver: true,
+      }),
+      Animated.timing(animationState.container, {
+        toValue: height,
+        duration: 100,
+        useNativeDriver: true,
+      }),
+    ]).start();
+  };
+
   return (
-    <View>
-      <Modal {...otherProps} transparent={true}>
-        <View style={styles.centeredView}>
-          <Pressable style={styles.closeArea} onPress={closeButtonFunction} />
-          <View style={[styles.modal, style]}>
-            {header || closeButton ? (
-              <View style={header ? styles.hasHeader : styles.noHeader}>
-                {header && <Header style={styles.modalHeader}>{header}</Header>}
-                {closeButton && (
-                  <TouchableOpacity onPress={closeButtonFunction}>
-                    <Image
-                      style={styles.icon}
-                      source={require("../assets/icons/ic_fire.png")}
-                    />
-                  </TouchableOpacity>
-                )}
-              </View>
-            ) : null}
-            <View style={styles.content}>{children}</View>
-          </View>
-          <Pressable style={styles.closeArea} onPress={closeButtonFunction} />
-        </View>
-      </Modal>
-    </View>
+    <Modal visible={visible} {...otherProps} transparent={true}>
+      <Animated.View
+        style={[
+          styles.backdrop,
+          {
+            opacity: animationState.opacity,
+            transform: [{ translateY: animationState.container }],
+          },
+        ]}
+      >
+        {/* Close modal on outside press */}
+        <Pressable style={styles.closeArea} onPress={closeModal()} />
+        {/* Modal Content */}
+        <Animated.View
+          style={[
+            styles.modal,
+            style,
+            {
+              transform: [{ translateY: animationState.modal }],
+            },
+          ]}
+        >
+          {header || closeButton ? (
+            <View style={header ? styles.hasHeader : styles.noHeader}>
+              {header && <Header style={styles.modalHeader}>{header}</Header>}
+              {closeButton && (
+                <TouchableOpacity onPress={closeModal()}>
+                  <Image
+                    style={styles.icon}
+                    source={require("../assets/icons/ic_fire.png")}
+                  />
+                </TouchableOpacity>
+              )}
+            </View>
+          ) : null}
+          <View style={styles.content}>{children}</View>
+        </Animated.View>
+        {/* Close modal on outside press */}
+        <Pressable style={styles.closeArea} onPress={openModal()} />
+      </Animated.View>
+    </Modal>
   );
 }
 
 const styles = StyleSheet.create({
-  centeredView: {
+  backdrop: {
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    backgroundColor: "rgba(0,0,0,0.3)",
+    backgroundColor: "rgba(0,0,0,0.2)",
   },
   closeArea: {
     flex: 1,
     alignSelf: "stretch",
   },
   modal: {
-    width: "90%",
+    width: width - 48,
     backgroundColor: colors.white,
     borderRadius: 24,
     marginHorizontal: 24,
