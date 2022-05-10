@@ -18,6 +18,7 @@ import TextInputCustom from "../components/TextInputCustom";
 import Header from "../components/Header";
 import FabButtonCustom from "../components/FabButtonCustom";
 import TextCustom from "../components/TextCustom";
+import IconCustom from "../components/IconCustom";
 
 function Step1({ navigation }) {
   const [gender, setGender] = useState("none");
@@ -92,6 +93,12 @@ function Step1({ navigation }) {
               >
                 👩
               </Toggle>
+              <IconCustom
+                name="ic_weight"
+                color={colors.primary}
+                size="28"
+                filled={false}
+              />
             </View>
           </Card>
           {/* Medidas */}
