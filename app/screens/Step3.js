@@ -41,17 +41,17 @@ function Step3({ route, navigation }) {
   const pickerGoalOptions = [
     {
       id: "1",
-      label: "Definir Défict Específico",
+      label: "Definir Superávit Específico",
       icon: require("../assets/icons/ic_height.png"),
     },
     {
       id: "2",
-      label: "Perder Peso Acelerado",
+      label: "Ganhar Peso Acelerado",
       icon: require("../assets/icons/ic_height.png"),
     },
     {
       id: "3",
-      label: "Perder Peso",
+      label: "Ganhar Peso",
       icon: require("../assets/icons/ic_height.png"),
     },
     {
@@ -61,20 +61,24 @@ function Step3({ route, navigation }) {
     },
     {
       id: "5",
-      label: "Ganhar Peso",
+      label: "Perder Peso",
       icon: require("../assets/icons/ic_height.png"),
     },
     {
       id: "6",
-      label: "Ganhar Peso Acelerado",
+      label: "Perder Peso Acelerado",
       icon: require("../assets/icons/ic_height.png"),
     },
     {
       id: "7",
-      label: "Definir Superávit Específico",
+      label: "Definir Défict Específico",
       icon: require("../assets/icons/ic_height.png"),
     },
   ];
+
+  function caloriesWithDot(value) {
+    return value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+  }
 
   return (
     <SafeAreaView style={styles.container}>
@@ -109,12 +113,10 @@ function Step3({ route, navigation }) {
               <View style={styles.margin} />
               <View style={styles.caloriesHeader}>
                 <TextCustom fontWeight="Semi Bold" style={styles.tbmLabel}>
-                  {userTMB.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".")}{" "}
-                  kcal
+                  {caloriesWithDot(userTMB)} kcal
                 </TextCustom>
                 <TextCustom fontWeight="Semi Bold" style={styles.tbmLabel}>
-                  {userTDEE.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".")}{" "}
-                  kcal
+                  {caloriesWithDot(userTDEE)} kcal
                 </TextCustom>
               </View>
             </View>

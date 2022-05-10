@@ -19,32 +19,36 @@ function Step2({ route, navigation }) {
   var tdee = 0;
   var isNextButtonDisabled = true;
 
+  function caloriesWithDot(value) {
+    return value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+  }
+
   function calculateTDEE() {
     if (activityLevel == "exercises") {
       isNextButtonDisabled = false;
       if (exercisesPerWeek <= 1) {
         tdee = Math.round(userTMB * 1.2);
-        return tdee.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".") + " kcal";
+        return caloriesWithDot(tdee) + " kcal";
       }
       if (exercisesPerWeek >= 2 && exercisesPerWeek <= 3) {
         tdee = Math.round(userTMB * 1.3);
-        return tdee.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".") + " kcal";
+        return caloriesWithDot(tdee) + " kcal";
       }
       if (exercisesPerWeek >= 4 && exercisesPerWeek <= 6) {
         tdee = Math.round(userTMB * 1.42);
-        return tdee.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".") + " kcal";
+        return caloriesWithDot(tdee) + " kcal";
       }
       if (exercisesPerWeek >= 7 && exercisesPerWeek <= 8) {
         tdee = Math.round(userTMB * 1.55);
-        return tdee.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".") + " kcal";
+        return caloriesWithDot(tdee) + " kcal";
       }
       if (exercisesPerWeek >= 9 && exercisesPerWeek <= 10) {
         tdee = Math.round(userTMB * 1.8);
-        return tdee.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".") + " kcal";
+        return caloriesWithDot(tdee) + " kcal";
       }
       if (exercisesPerWeek >= 11 && exercisesPerWeek <= 21) {
         tdee = Math.round(userTMB * 2);
-        return tdee.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".") + " kcal";
+        return caloriesWithDot(tdee) + " kcal";
       }
       if (exercisesPerWeek >= 22) {
         return "Fala sério!";
@@ -53,7 +57,7 @@ function Step2({ route, navigation }) {
     if (activityLevel == "calories") {
       isNextButtonDisabled = false;
       tdee = Math.round(userTMB * 1.1 + caloriesPerDay * 1);
-      return tdee.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".") + " kcal";
+      return caloriesWithDot(tdee) + " kcal";
     } else {
       isNextButtonDisabled = true;
     }
