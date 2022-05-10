@@ -24,6 +24,8 @@ export default function IconCustom({
 
       {(() => {
         switch (name) {
+          case "ic_placeholder":
+            return <IconWeight color={color} size={size} filled={filled} />;
           case "ic_weight":
             return <IconWeight color={color} size={size} filled={filled} />;
           case "ic_height":

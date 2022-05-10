@@ -9,8 +9,15 @@ import {
 import colors from "../config/colors";
 import * as Haptics from "expo-haptics";
 import TextCustom from "../components/TextCustom";
+import IconCustom from "./IconCustom";
 
-function TextInputCustom({ children, icon, sufix, style, ...otherProps }) {
+function TextInputCustom({
+  children,
+  icon = "ic_placeholder",
+  sufix,
+  style,
+  ...otherProps
+}) {
   const [content, onChangeContent] = useState();
   const [isActive, setActive] = useState(false);
   const textInputContent = useRef();
@@ -36,7 +43,9 @@ function TextInputCustom({ children, icon, sufix, style, ...otherProps }) {
           isActive === true ? styles.inputFocus : styles.inpuinputUnfocus,
         ]}
       >
-        {icon && <Image style={styles.icon} source={icon} />}
+        {icon && (
+          <IconCustom name={icon} size="28" filled={isActive ? true : false} />
+        )}
         <TextInput
           style={styles.inputText}
           onChangeText={onChangeContent}
@@ -51,7 +60,7 @@ function TextInputCustom({ children, icon, sufix, style, ...otherProps }) {
           onBlur={() => setActive(false)}
         />
 
-        {sufix && <TextCustom>{sufix}</TextCustom>}
+        {sufix && <TextCustom style={styles.sufixLabel}>{sufix}</TextCustom>}
       </View>
     </TouchableOpacity>
   );
@@ -59,26 +68,26 @@ function TextInputCustom({ children, icon, sufix, style, ...otherProps }) {
 
 const styles = StyleSheet.create({
   input: {
-    backgroundColor: colors.grayLight,
     borderRadius: 12,
     flexDirection: "row",
     alignItems: "center",
-    paddingLeft: 11,
-    borderWidth: 3,
+    paddingHorizontal: 11,
+    borderWidth: 1,
     borderColor: colors.grayLight,
     height: 52,
   },
+  inputFocus: {
+    borderColor: colors.primary,
+    borderWidth: 3,
+    paddingHorizontal: 9,
+  },
   inputText: {
     color: colors.grayDark,
-    paddingRight: 4,
     alignItems: "center",
     justifyContent: "center",
     fontSize: 16,
     height: "100%",
     marginLeft: 12,
-  },
-  inputFocus: {
-    borderColor: colors.primary,
   },
   inputUnfocus: {},
   inputWithLabel: {
@@ -93,9 +102,8 @@ const styles = StyleSheet.create({
     color: colors.grayDark,
     letterSpacing: -0.5,
   },
-  icon: {
-    height: 30,
-    width: 30,
+  sufixLabel: {
+    marginLeft: 12,
   },
 });
 

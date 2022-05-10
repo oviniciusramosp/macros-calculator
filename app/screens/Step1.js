@@ -93,12 +93,6 @@ function Step1({ navigation }) {
               >
                 👩
               </Toggle>
-              <IconCustom
-                name="ic_weight"
-                color={colors.primary}
-                size="28"
-                filled={false}
-              />
             </View>
           </Card>
           {/* Medidas */}
@@ -112,9 +106,9 @@ function Step1({ navigation }) {
                 maxLength={3}
                 returnKeyType="done"
                 textAlign="center"
-                icon={require("../assets/icons/ic_height.png")}
                 onChangeText={(value) => setHeight(value)}
                 sufix="cm"
+                icon="ic_height"
               >
                 Altura
               </TextInputCustom>
@@ -126,9 +120,9 @@ function Step1({ navigation }) {
                 returnKeyType="done"
                 textAlign="center"
                 maxLength={3}
-                icon={require("../assets/icons/ic_weight.png")}
                 onChangeText={(value) => setWeight(value)}
                 sufix="Kg"
+                icon="ic_weight"
               >
                 Peso
               </TextInputCustom>
@@ -142,7 +136,6 @@ function Step1({ navigation }) {
                 returnKeyType="done"
                 textAlign="center"
                 maxLength={3}
-                icon={require("../assets/icons/ic_cake-alt.png")}
                 onChangeText={(value) => setAge(value)}
                 sufix="anos"
               >
