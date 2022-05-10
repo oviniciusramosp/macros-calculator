@@ -19,22 +19,18 @@ function Step3({ route, navigation }) {
     {
       id: "1",
       label: "Pouca Gordura e Pouca Massa Magra",
-      icon: require("../assets/icons/ic_body_skinny.png"),
     },
     {
       id: "2",
       label: "Perder Peso Acelerado",
-      icon: require("../assets/icons/ic_body_fat_muscle.png"),
     },
     {
       id: "3",
       label: "Perder Peso",
-      icon: require("../assets/icons/ic_body_muscle.png"),
     },
     {
       id: "4",
       label: "Manter Peso",
-      icon: require("../assets/icons/ic_body_fat.png"),
     },
   ];
 
@@ -42,37 +38,30 @@ function Step3({ route, navigation }) {
     {
       id: "1",
       label: "Definir Superávit Específico",
-      icon: require("../assets/icons/ic_height.png"),
     },
     {
       id: "2",
       label: "Ganhar Peso Acelerado",
-      icon: require("../assets/icons/ic_height.png"),
     },
     {
       id: "3",
       label: "Ganhar Peso",
-      icon: require("../assets/icons/ic_height.png"),
     },
     {
       id: "4",
       label: "Manter Peso",
-      icon: require("../assets/icons/ic_height.png"),
     },
     {
       id: "5",
       label: "Perder Peso",
-      icon: require("../assets/icons/ic_height.png"),
     },
     {
       id: "6",
       label: "Perder Peso Acelerado",
-      icon: require("../assets/icons/ic_height.png"),
     },
     {
       id: "7",
       label: "Definir Défict Específico",
-      icon: require("../assets/icons/ic_height.png"),
     },
   ];
 

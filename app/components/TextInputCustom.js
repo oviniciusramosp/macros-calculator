@@ -49,6 +49,8 @@ function TextInputCustom({
         <TextInput
           style={styles.inputText}
           onChangeText={onChangeContent}
+          placeholderTextColor={colors.grayDark}
+          enablesReturnKeyAutomatically={true}
           ref={textInputContent}
           value={content}
           maxLength={3}
@@ -73,7 +75,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     paddingHorizontal: 11,
     borderWidth: 1,
-    borderColor: colors.grayLight,
+    borderColor: colors.fadedGrayLight,
     height: 52,
   },
   inputFocus: {
@@ -82,7 +84,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 9,
   },
   inputText: {
-    color: colors.grayDark,
+    color: colors.black,
     alignItems: "center",
     justifyContent: "center",
     fontSize: 16,
@@ -99,7 +101,7 @@ const styles = StyleSheet.create({
     fontWeight: "600",
     lineHeight: 16,
     marginBottom: 6,
-    color: colors.grayDark,
+    color: colors.black,
     letterSpacing: -0.5,
   },
   sufixLabel: {

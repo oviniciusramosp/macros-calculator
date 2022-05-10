@@ -22,9 +22,9 @@ import IconCustom from "../components/IconCustom";
 
 function Step1({ navigation }) {
   const [gender, setGender] = useState("none");
-  const [height, setHeight] = useState(0);
-  const [weight, setWeight] = useState(0);
-  const [age, setAge] = useState(0);
+  const [height, setHeight] = useState();
+  const [weight, setWeight] = useState();
+  const [age, setAge] = useState();
   var tMB = 0;
   var isNextButtonDisabled = true;
 
@@ -44,30 +44,23 @@ function Step1({ navigation }) {
     }
   };
 
+  function caloriesWithDot(value) {
+    return value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+  }
+
   function calculate() {
-    if (gender === "none") {
-      return "Selecione um Gênero";
-    }
-    if (height > 0 && weight > 0 && age > 0) {
+    if (height > 0 && weight > 0 && age > 10) {
       isNextButtonDisabled = false;
       if (gender === "male") {
         tMB = maleTMB;
-        return (
-          maleTMB.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".") + " kcal"
-        );
+        return caloriesWithDot(maleTMB) + " kcal";
       } else {
         tMB = femaleTMB;
-        return (
-          femaleTMB.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".") + " kcal"
-        );
+        return caloriesWithDot(femaleTMB) + " kcal";
       }
+    } else {
+      tMB = 0;
     }
-    tMB = 0;
-    return "Preencha os Campos";
-  }
-
-  function showAlert(content, navigation) {
-    Alert.alert(content);
   }
 
   return (
@@ -80,19 +73,17 @@ function Step1({ navigation }) {
             <View style={styles.row}>
               <Toggle
                 onPress={() => setToggleGender("male")}
-                isEmoji={true}
                 isSelected={gender === "male" ? true : false}
-              >
-                👨
-              </Toggle>
+                icon="ic_male"
+              />
               <View style={styles.margin} />
               <Toggle
                 onPress={() => setToggleGender("female")}
-                isEmoji={true}
+                // emoji="👩"
+                // label="test"
+                icon="ic_female"
                 isSelected={gender === "female" ? true : false}
-              >
-                👩
-              </Toggle>
+              />
             </View>
           </Card>
           {/* Medidas */}
@@ -100,10 +91,9 @@ function Step1({ navigation }) {
             <Header>Suas Medidas</Header>
             <View style={styles.row}>
               <TextInputCustom
+                maxLength={3}
                 placeholder="000"
                 keyboardType="number-pad"
-                // defaultValue={height.toString()}
-                maxLength={3}
                 returnKeyType="done"
                 textAlign="center"
                 onChangeText={(value) => setHeight(value)}
@@ -114,14 +104,13 @@ function Step1({ navigation }) {
               </TextInputCustom>
               <View style={styles.margin} />
               <TextInputCustom
+                maxLength={3}
                 placeholder="000"
-                // defaultValue={weight.toString()}
                 keyboardType="number-pad"
                 returnKeyType="done"
                 textAlign="center"
-                maxLength={3}
                 onChangeText={(value) => setWeight(value)}
-                sufix="Kg"
+                sufix="kg"
                 icon="ic_weight"
               >
                 Peso
@@ -130,14 +119,14 @@ function Step1({ navigation }) {
             <View style={styles.margin} />
             <View style={styles.row}>
               <TextInputCustom
+                maxLength={3}
                 placeholder="00"
-                // defaultValue={age.toString()}
                 keyboardType="number-pad"
                 returnKeyType="done"
                 textAlign="center"
-                maxLength={3}
                 onChangeText={(value) => setAge(value)}
                 sufix="anos"
+                icon="ic_cake"
               >
                 Idade
               </TextInputCustom>
@@ -152,9 +141,27 @@ function Step1({ navigation }) {
               <View style={styles.tbmIcon}>
                 <TextCustom style={styles.emojiIcon}>🔥</TextCustom>
               </View>
-              <TextCustom fontWeight="Semi Bold" style={styles.tbmLabel}>
+              {gender === "none" ? (
+                <TextCustom fontWeight="Semi Bold" style={styles.tbmLabel}>
+                  Selecione um Gênero
+                </TextCustom>
+              ) : height > 250 || weight > 300 || age > 110 ? (
+                <TextCustom fontWeight="Semi Bold" style={styles.tbmLabel}>
+                  Eu sou uma piada para você?
+                </TextCustom>
+              ) : height > 0 && weight > 0 && age > 10 ? (
+                <TextCustom fontWeight="Semi Bold" style={styles.tbmLabel}>
+                  {calculate()}
+                </TextCustom>
+              ) : (
+                <TextCustom fontWeight="Semi Bold" style={styles.tbmLabel}>
+                  Preencha todos os Campos
+                </TextCustom>
+              )}
+
+              {/* <TextCustom fontWeight="Semi Bold" style={styles.tbmLabel}>
                 {calculate()}
-              </TextCustom>
+              </TextCustom> */}
             </View>
           </Card>
         </View>
@@ -221,7 +228,8 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   tbmIcon: {
-    backgroundColor: colors.grayLight,
+    borderColor: colors.grayLight,
+    borderWidth: 1,
     height: 52,
     width: 52,
     justifyContent: "center",
@@ -234,7 +242,7 @@ const styles = StyleSheet.create({
   },
   tbmLabel: {
     fontSize: 18,
-    fontWeight: "600",
+    flex: 1,
   },
 });
 

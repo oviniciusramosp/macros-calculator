@@ -4,6 +4,9 @@ import { View } from "react-native";
 // Icons Available
 import IconWeight from "../assets/icons/IconWeight";
 import IconHeight from "../assets/icons/IconHeight";
+import IconCake from "../assets/icons/IconCake";
+import IconGenderMale from "../assets/icons/IconGenderMale";
+import IconGenderFemale from "../assets/icons/IconGenderFemale";
 
 export default function IconCustom({
   color = colors.primary,
@@ -30,6 +33,14 @@ export default function IconCustom({
             return <IconWeight color={color} size={size} filled={filled} />;
           case "ic_height":
             return <IconHeight color={color} size={size} filled={filled} />;
+          case "ic_cake":
+            return <IconCake color={color} size={size} filled={filled} />;
+          case "ic_male":
+            return <IconGenderMale color={color} size={size} filled={filled} />;
+          case "ic_female":
+            return (
+              <IconGenderFemale color={color} size={size} filled={filled} />
+            );
           default:
             return null;
         }
