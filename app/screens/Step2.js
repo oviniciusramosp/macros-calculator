@@ -8,6 +8,7 @@ import colors from "../config/colors";
 import Toggle from "../components/ToggleItem";
 import TextInputCustom from "../components/TextInputCustom";
 import TextCustom from "../components/TextCustom";
+import { LinearGradient } from "expo-linear-gradient";
 
 function Step2({ route, navigation }) {
   const { userTMB, userGender } = route.params;
@@ -18,41 +19,46 @@ function Step2({ route, navigation }) {
   var tdee = 0;
   var isNextButtonDisabled = true;
 
+  function caloriesWithDot(value) {
+    return value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+  }
+
   function calculateTDEE() {
     if (activityLevel == "exercises") {
       isNextButtonDisabled = false;
       if (exercisesPerWeek <= 1) {
         tdee = Math.round(userTMB * 1.2);
-        return tdee.toString() + " kcal";
+        return caloriesWithDot(tdee) + " kcal";
       }
       if (exercisesPerWeek >= 2 && exercisesPerWeek <= 3) {
         tdee = Math.round(userTMB * 1.3);
-        return tdee.toString() + " kcal";
+        return caloriesWithDot(tdee) + " kcal";
       }
       if (exercisesPerWeek >= 4 && exercisesPerWeek <= 6) {
         tdee = Math.round(userTMB * 1.42);
-        return tdee.toString() + " kcal";
+        return caloriesWithDot(tdee) + " kcal";
       }
       if (exercisesPerWeek >= 7 && exercisesPerWeek <= 8) {
         tdee = Math.round(userTMB * 1.55);
-        return tdee.toString() + " kcal";
+        return caloriesWithDot(tdee) + " kcal";
       }
       if (exercisesPerWeek >= 9 && exercisesPerWeek <= 10) {
         tdee = Math.round(userTMB * 1.8);
-        return tdee.toString() + " kcal";
+        return caloriesWithDot(tdee) + " kcal";
       }
       if (exercisesPerWeek >= 11 && exercisesPerWeek <= 21) {
         tdee = Math.round(userTMB * 2);
-        return tdee.toString() + " kcal";
+        return caloriesWithDot(tdee) + " kcal";
       }
       if (exercisesPerWeek >= 22) {
+        isNextButtonDisabled = true;
         return "Fala sério!";
       }
     }
     if (activityLevel == "calories") {
       isNextButtonDisabled = false;
       tdee = Math.round(userTMB * 1.1 + caloriesPerDay * 1);
-      return tdee.toString() + " kcal";
+      return caloriesWithDot(tdee) + " kcal";
     } else {
       isNextButtonDisabled = true;
     }
@@ -73,7 +79,7 @@ function Step2({ route, navigation }) {
 
   return (
     <SafeAreaView style={styles.container}>
-      <ScrollView style={styles.list}>
+      <ScrollView contentContainerStyle={styles.list}>
         {/* Taxa Metabólica Basal */}
         <Card>
           <View style={styles.tbmContent}>
@@ -81,10 +87,10 @@ function Step2({ route, navigation }) {
               onPress={() => navigation.goBack()}
               isEmoji={false}
               size="small"
-              backgroundColor="gray"
-            >
-              ←
-            </FabButtonCustom>
+              buttonStyle="outlined"
+              icon="ic_arrow"
+              iconRotate={180}
+            />
             <View style={styles.margin} />
             <View style={styles.margin} />
             <TextCustom
@@ -94,7 +100,7 @@ function Step2({ route, navigation }) {
               TMB{" "}
             </TextCustom>
             <TextCustom fontWeight="Semi Bold" style={styles.tbmLabel}>
-              {userTMB} kcal
+              {userTMB.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".")} kcal
             </TextCustom>
           </View>
         </Card>
@@ -103,19 +109,15 @@ function Step2({ route, navigation }) {
           <View style={styles.row}>
             <Toggle
               onPress={() => setActivityLevel("exercises")}
-              isEmoji={false}
               isSelected={activityLevel === "exercises" ? true : false}
-            >
-              Exercícios
-            </Toggle>
+              label="Exercícios"
+            />
             <View style={styles.margin} />
             <Toggle
               onPress={() => setActivityLevel("calories")}
-              isEmoji={false}
               isSelected={activityLevel === "calories" ? true : false}
-            >
-              Calorias
-            </Toggle>
+              label="Calorias"
+            />
           </View>
           <TextCustom style={styles.activityLabel}>
             {activityLevel == "exercises"
@@ -128,7 +130,7 @@ function Step2({ route, navigation }) {
             maxLength={2}
             returnKeyType="done"
             textAlign="center"
-            icon={require("../assets/icons/ic_fire.png")}
+            icon={"ic_weight"}
             onChangeText={(value) => setExercisesPerWeek(value)}
             sufix={exercisesPerWeek != 1 ? "exercícios" : "exercício"}
             style={[
@@ -142,7 +144,7 @@ function Step2({ route, navigation }) {
             maxLength={4}
             returnKeyType="done"
             textAlign="center"
-            icon={require("../assets/icons/ic_fire.png")}
+            icon={"ic_placeholder"}
             onChangeText={(value) => setCaloriesPerDay(value)}
             sufix="kcal/dia"
             style={[
@@ -162,22 +164,26 @@ function Step2({ route, navigation }) {
             </TextCustom>
           </View>
         </Card>
-        <View style={styles.fab}>
+      </ScrollView>
+      <View>
+        <LinearGradient
+          style={styles.fab}
+          colors={colors.grayLightGradient}
+          locations={[0, 0.5]}
+        >
           <FabButtonCustom
             disabled={isNextButtonDisabled}
             onPress={() =>
               navigation.navigate("Step 3", {
                 userTDEE: tdee,
                 userTMB: userTMB,
+                userGender: userGender,
               })
             }
-            isEmoji={true}
-          >
-            →
-          </FabButtonCustom>
-        </View>
-        <View style={styles.margin} />
-      </ScrollView>
+            icon={"ic_arrow"}
+          />
+        </LinearGradient>
+      </View>
       <StatusBar style="dark" />
     </SafeAreaView>
   );
@@ -190,6 +196,7 @@ const styles = StyleSheet.create({
   },
   list: {
     padding: 24,
+    paddingBottom: 72 + 48,
   },
   row: {
     flex: 1,
@@ -247,14 +254,16 @@ const styles = StyleSheet.create({
     paddingVertical: 16,
   },
   activityInput: {
-    width: 152,
-    alignSelf: "center",
+    // width: 152,
+    // alignSelf: "center",
   },
   fab: {
     justifyContent: "center",
     alignItems: "center",
-    flex: 1,
-    marginBottom: 24,
+    width: "100%",
+    padding: 24,
+    position: "absolute",
+    bottom: 0,
   },
   hide: {
     display: "none",

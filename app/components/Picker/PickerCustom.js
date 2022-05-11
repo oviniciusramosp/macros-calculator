@@ -11,29 +11,37 @@ import TextCustom from "../TextCustom";
 import colors from "../../config/colors";
 import ModalCustom from "../ModalCustom";
 import PickerItemCustom from "./PickerItemCustom";
+import IconCustom from "../IconCustom";
+import * as Haptics from "expo-haptics";
 
 export default function PickerCustom({
   options,
   onChangeSelect,
+  iconListSize,
   placeholder = "Selecionar",
   modalHeader,
   closeButton = false,
 }) {
   const [content, setContent] = useState(placeholder);
-  const [contentImage, setContentImage] = useState(null);
+  const [contentIcon, setContentIcon] = useState(null);
+  const [contentIconRotate, setContentIconRotate] = useState(null);
   const [modalVisible, setModalVisible] = useState(false);
   const [itemSelected, setItemSelected] = useState("");
 
   function renderOption(item) {
     return (
       <PickerItemCustom
-        itemLabel={item.label}
+        label={item.label}
+        description={item.description}
+        iconRotate={item.iconRotate}
         selected={item.id === itemSelected}
-        itemIconPath={item.icon}
+        icon={item.icon}
+        iconSize={iconListSize}
         onPress={() => {
           onChangeSelect(item.id);
           setContent(item.label);
-          setContentImage(item.icon);
+          setContentIcon(item.icon);
+          setContentIconRotate(item.iconRotate);
           setModalVisible(false);
           setItemSelected(item.id);
         }}
@@ -46,20 +54,26 @@ export default function PickerCustom({
       <TouchableOpacity
         style={styles.picker}
         onPress={() => setModalVisible(true)}
+        onPressIn={() => Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light)}
       >
         <View style={styles.leftPickerLabel}>
-          {contentImage && <Image style={styles.icon} source={contentImage} />}
+          {contentIcon && (
+            <IconCustom
+              style={styles.icon}
+              name={contentIcon}
+              size={28}
+              rotate={contentIconRotate}
+              filled={true}
+            />
+          )}
           <TextCustom style={styles.pickerLabel} numberOfLines={1}>
             {content}
           </TextCustom>
         </View>
-        <Image
-          style={styles.chevron}
-          source={
-            modalVisible
-              ? require("../../assets/icons/ic_chevron_up.png")
-              : require("../../assets/icons/ic_chevron_down.png")
-          }
+        <IconCustom
+          name={"ic_chevron"}
+          rotate={modalVisible ? 180 : 0}
+          size={28}
         />
       </TouchableOpacity>
       <ModalCustom
@@ -86,13 +100,12 @@ export default function PickerCustom({
 const styles = StyleSheet.create({
   picker: {
     flex: 1,
-    backgroundColor: colors.grayLight,
+    borderColor: colors.fadedGrayLight,
+    borderWidth: 1,
     borderRadius: 12,
     flexDirection: "row",
     alignItems: "center",
     paddingHorizontal: 11,
-    borderWidth: 3,
-    borderColor: colors.grayLight,
     height: 52,
   },
   leftPickerLabel: {
@@ -110,8 +123,6 @@ const styles = StyleSheet.create({
     height: 12,
   },
   icon: {
-    height: 30,
-    width: 30,
     marginRight: 12,
   },
   chevron: { height: 30, width: 30, marginLeft: 12 },

@@ -21,9 +21,8 @@ const styles = StyleSheet.create({
     fontSize: 24,
     marginBottom: 16,
     lineHeight: 28,
-    color: colors.grayDark,
-    fontWeight: "700",
-    letterSpacing: -0.7,
+    color: colors.black,
+     letterSpacing: -0.7,
   },
 });
 

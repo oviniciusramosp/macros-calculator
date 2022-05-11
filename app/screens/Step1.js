@@ -1,13 +1,8 @@
 import React, { useState } from "react";
-import {
-  SafeAreaView,
-  ScrollView,
-  StyleSheet,
-  View,
-  Alert,
-} from "react-native";
+import { SafeAreaView, ScrollView, StyleSheet, View } from "react-native";
 // expo libraries
 import { StatusBar } from "expo-status-bar";
+import { LinearGradient } from "expo-linear-gradient";
 // styles
 import colors from "../config/colors";
 // custom components
@@ -17,12 +12,13 @@ import TextInputCustom from "../components/TextInputCustom";
 import Header from "../components/Header";
 import FabButtonCustom from "../components/FabButtonCustom";
 import TextCustom from "../components/TextCustom";
+import IconCustom from "../components/IconCustom";
 
 function Step1({ navigation }) {
   const [gender, setGender] = useState("none");
-  const [height, setHeight] = useState(0);
-  const [weight, setWeight] = useState(0);
-  const [age, setAge] = useState(0);
+  const [height, setHeight] = useState();
+  const [weight, setWeight] = useState();
+  const [age, setAge] = useState();
   var tMB = 0;
   var isNextButtonDisabled = true;
 
@@ -42,31 +38,28 @@ function Step1({ navigation }) {
     }
   };
 
+  function caloriesWithDot(value) {
+    return value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+  }
+
   function calculate() {
-    if (gender === "none") {
-      return "Selecione um Gênero";
-    }
-    if (height > 0 && weight > 0 && age > 0) {
+    if (height > 0 && weight > 0 && age > 10) {
       isNextButtonDisabled = false;
       if (gender === "male") {
         tMB = maleTMB;
-        return maleTMB.toString() + " kcal";
+        return caloriesWithDot(maleTMB) + " kcal";
       } else {
         tMB = femaleTMB;
-        return femaleTMB.toString() + " kcal";
+        return caloriesWithDot(femaleTMB) + " kcal";
       }
+    } else {
+      tMB = 0;
     }
-    tMB = 0;
-    return "Preencha os Campos";
-  }
-
-  function showAlert(content, navigation) {
-    Alert.alert(content);
   }
 
   return (
     <SafeAreaView style={styles.container}>
-      <ScrollView style={styles.list}>
+      <ScrollView contentContainerStyle={styles.list}>
         <View>
           {/* Gender */}
           <Card>
@@ -74,19 +67,17 @@ function Step1({ navigation }) {
             <View style={styles.row}>
               <Toggle
                 onPress={() => setToggleGender("male")}
-                isEmoji={true}
                 isSelected={gender === "male" ? true : false}
-              >
-                👨
-              </Toggle>
+                icon="ic_male"
+              />
               <View style={styles.margin} />
               <Toggle
                 onPress={() => setToggleGender("female")}
-                isEmoji={true}
+                // emoji="👩"
+                // label="test"
+                icon="ic_female"
                 isSelected={gender === "female" ? true : false}
-              >
-                👩
-              </Toggle>
+              />
             </View>
           </Card>
           {/* Medidas */}
@@ -94,29 +85,27 @@ function Step1({ navigation }) {
             <Header>Suas Medidas</Header>
             <View style={styles.row}>
               <TextInputCustom
+                maxLength={3}
                 placeholder="000"
                 keyboardType="number-pad"
-                // defaultValue={height.toString()}
-                maxLength={3}
                 returnKeyType="done"
                 textAlign="center"
-                icon={require("../assets/icons/ic_height.png")}
                 onChangeText={(value) => setHeight(value)}
                 sufix="cm"
+                icon="ic_height"
               >
                 Altura
               </TextInputCustom>
               <View style={styles.margin} />
               <TextInputCustom
+                maxLength={3}
                 placeholder="000"
-                // defaultValue={weight.toString()}
                 keyboardType="number-pad"
                 returnKeyType="done"
                 textAlign="center"
-                maxLength={3}
-                icon={require("../assets/icons/ic_weight.png")}
                 onChangeText={(value) => setWeight(value)}
-                sufix="Kg"
+                sufix="kg"
+                icon="ic_weight"
               >
                 Peso
               </TextInputCustom>
@@ -124,15 +113,14 @@ function Step1({ navigation }) {
             <View style={styles.margin} />
             <View style={styles.row}>
               <TextInputCustom
+                maxLength={3}
                 placeholder="00"
-                // defaultValue={age.toString()}
                 keyboardType="number-pad"
                 returnKeyType="done"
                 textAlign="center"
-                maxLength={3}
-                icon={require("../assets/icons/ic_cake-alt.png")}
                 onChangeText={(value) => setAge(value)}
                 sufix="anos"
+                icon="ic_cake"
               >
                 Idade
               </TextInputCustom>
@@ -143,32 +131,69 @@ function Step1({ navigation }) {
           {/* Taxa Metabólica Basal */}
           <Card>
             <Header style={styles.colorPrimary}>Taxa Metabólica Basal</Header>
-            <View style={styles.tbmContent}>
-              <View style={styles.tbmIcon}>
-                <TextCustom style={styles.emojiIcon}>🔥</TextCustom>
+
+            {gender === "none" ? (
+              <View style={styles.tbmContent}>
+                <View style={styles.tbmIcon}>
+                  <IconCustom
+                    name={"ic_gender"}
+                    color={colors.grayDark}
+                    size="28"
+                  />
+                </View>
+                <TextCustom fontWeight="Semi Bold" style={styles.tbmLabel}>
+                  Selecione um Gênero
+                </TextCustom>
               </View>
-              <TextCustom fontWeight="Semi Bold" style={styles.tbmLabel}>
-                {calculate()}
-              </TextCustom>
-            </View>
+            ) : height > 250 || weight > 300 || age > 110 ? (
+              <View style={styles.tbmContent}>
+                <View style={styles.tbmIcon}>
+                  <IconCustom name={"ic_face_serious"} size="28" />
+                </View>
+                <TextCustom fontWeight="Semi Bold" style={styles.tbmLabel}>
+                  Eu sou uma piada para você?
+                </TextCustom>
+              </View>
+            ) : height > 0 && weight > 0 && age > 10 ? (
+              <View style={styles.tbmContent}>
+                <View style={styles.tbmIcon}>
+                  <IconCustom name={"ic_fire"} size="28" />
+                </View>
+                <TextCustom fontWeight="Semi Bold" style={styles.tbmLabel}>
+                  {calculate()}
+                </TextCustom>
+              </View>
+            ) : (
+              <View style={styles.tbmContent}>
+                <View style={styles.tbmIcon}>
+                  <TextCustom style={styles.emojiIcon}>🔥</TextCustom>
+                </View>
+                <TextCustom fontWeight="Semi Bold" style={styles.tbmLabel}>
+                  Preencha todos os Campos
+                </TextCustom>
+              </View>
+            )}
           </Card>
-          <View style={styles.fab}>
-            <FabButtonCustom
-              disabled={isNextButtonDisabled}
-              onPress={() =>
-                navigation.navigate("Step 2", {
-                  userTMB: tMB,
-                  userGender: gender,
-                })
-              }
-              isEmoji={true}
-            >
-              →
-            </FabButtonCustom>
-          </View>
-          <View style={styles.margin} />
         </View>
       </ScrollView>
+      <View>
+        <LinearGradient
+          style={styles.fab}
+          colors={colors.grayLightGradient}
+          locations={[0, 0.5]}
+        >
+          <FabButtonCustom
+            disabled={isNextButtonDisabled}
+            onPress={() =>
+              navigation.navigate("Step 2", {
+                userTMB: tMB,
+                userGender: gender,
+              })
+            }
+            icon={"ic_arrow"}
+          />
+        </LinearGradient>
+      </View>
       <StatusBar style="dark" />
     </SafeAreaView>
   );
@@ -181,6 +206,7 @@ const styles = StyleSheet.create({
   },
   list: {
     padding: 24,
+    paddingBottom: 72 + 48,
   },
   row: {
     flex: 1,
@@ -196,8 +222,10 @@ const styles = StyleSheet.create({
   fab: {
     justifyContent: "center",
     alignItems: "center",
-    flex: 1,
-    marginBottom: 24,
+    width: "100%",
+    padding: 24,
+    position: "absolute",
+    bottom: 0,
   },
   colorPrimary: {
     color: colors.primary,
@@ -208,7 +236,8 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   tbmIcon: {
-    backgroundColor: colors.grayLight,
+    borderColor: colors.fadedGrayLight,
+    borderWidth: 1,
     height: 52,
     width: 52,
     justifyContent: "center",
@@ -221,7 +250,7 @@ const styles = StyleSheet.create({
   },
   tbmLabel: {
     fontSize: 18,
-    fontWeight: "600",
+    flex: 1,
   },
 });
 

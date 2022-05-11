@@ -11,6 +11,7 @@ import {
 } from "react-native";
 import colors from "../config/colors";
 import Header from "./Header";
+import IconCustom from "./IconCustom";
 
 const { height } = Dimensions.get("window");
 const { width } = Dimensions.get("window");
@@ -112,10 +113,7 @@ export default function ModalCustom({
               {header && <Header style={styles.modalHeader}>{header}</Header>}
               {closeButton && (
                 <TouchableOpacity onPress={closeButtonFunction}>
-                  <Image
-                    style={styles.icon}
-                    source={require("../assets/icons/ic_fire.png")}
-                  />
+                  <IconCustom name={"ic_placeholder"} />
                 </TouchableOpacity>
               )}
             </View>
