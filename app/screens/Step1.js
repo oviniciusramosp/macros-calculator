@@ -1,11 +1,5 @@
 import React, { useState } from "react";
-import {
-  SafeAreaView,
-  ScrollView,
-  StyleSheet,
-  View,
-  Alert,
-} from "react-native";
+import { SafeAreaView, ScrollView, StyleSheet, View } from "react-native";
 // expo libraries
 import { StatusBar } from "expo-status-bar";
 import { LinearGradient } from "expo-linear-gradient";
@@ -137,32 +131,48 @@ function Step1({ navigation }) {
           {/* Taxa Metabólica Basal */}
           <Card>
             <Header style={styles.colorPrimary}>Taxa Metabólica Basal</Header>
-            <View style={styles.tbmContent}>
-              <View style={styles.tbmIcon}>
-                <TextCustom style={styles.emojiIcon}>🔥</TextCustom>
-              </View>
-              {gender === "none" ? (
+
+            {gender === "none" ? (
+              <View style={styles.tbmContent}>
+                <View style={styles.tbmIcon}>
+                  <IconCustom
+                    name={"ic_gender"}
+                    color={colors.grayDark}
+                    size="28"
+                  />
+                </View>
                 <TextCustom fontWeight="Semi Bold" style={styles.tbmLabel}>
                   Selecione um Gênero
                 </TextCustom>
-              ) : height > 250 || weight > 300 || age > 110 ? (
+              </View>
+            ) : height > 250 || weight > 300 || age > 110 ? (
+              <View style={styles.tbmContent}>
+                <View style={styles.tbmIcon}>
+                  <IconCustom name={"ic_face_serious"} size="28" />
+                </View>
                 <TextCustom fontWeight="Semi Bold" style={styles.tbmLabel}>
                   Eu sou uma piada para você?
                 </TextCustom>
-              ) : height > 0 && weight > 0 && age > 10 ? (
+              </View>
+            ) : height > 0 && weight > 0 && age > 10 ? (
+              <View style={styles.tbmContent}>
+                <View style={styles.tbmIcon}>
+                  <IconCustom name={"ic_fire"} size="28" />
+                </View>
                 <TextCustom fontWeight="Semi Bold" style={styles.tbmLabel}>
                   {calculate()}
                 </TextCustom>
-              ) : (
+              </View>
+            ) : (
+              <View style={styles.tbmContent}>
+                <View style={styles.tbmIcon}>
+                  <TextCustom style={styles.emojiIcon}>🔥</TextCustom>
+                </View>
                 <TextCustom fontWeight="Semi Bold" style={styles.tbmLabel}>
                   Preencha todos os Campos
                 </TextCustom>
-              )}
-
-              {/* <TextCustom fontWeight="Semi Bold" style={styles.tbmLabel}>
-                {calculate()}
-              </TextCustom> */}
-            </View>
+              </View>
+            )}
           </Card>
         </View>
       </ScrollView>
@@ -180,10 +190,8 @@ function Step1({ navigation }) {
                 userGender: gender,
               })
             }
-            isEmoji={true}
-          >
-            →
-          </FabButtonCustom>
+            icon={"ic_arrow"}
+          />
         </LinearGradient>
       </View>
       <StatusBar style="dark" />
@@ -228,7 +236,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   tbmIcon: {
-    borderColor: colors.grayLight,
+    borderColor: colors.fadedGrayLight,
     borderWidth: 1,
     height: 52,
     width: 52,

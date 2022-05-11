@@ -86,10 +86,10 @@ function Step2({ route, navigation }) {
               onPress={() => navigation.goBack()}
               isEmoji={false}
               size="small"
-              backgroundColor="gray"
-            >
-              ←
-            </FabButtonCustom>
+              buttonStyle="outlined"
+              icon="ic_arrow"
+              iconRotate={180}
+            />
             <View style={styles.margin} />
             <View style={styles.margin} />
             <TextCustom
@@ -108,19 +108,15 @@ function Step2({ route, navigation }) {
           <View style={styles.row}>
             <Toggle
               onPress={() => setActivityLevel("exercises")}
-              isEmoji={false}
               isSelected={activityLevel === "exercises" ? true : false}
-            >
-              Exercícios
-            </Toggle>
+              label="Exercícios"
+            />
             <View style={styles.margin} />
             <Toggle
               onPress={() => setActivityLevel("calories")}
-              isEmoji={false}
               isSelected={activityLevel === "calories" ? true : false}
-            >
-              Calorias
-            </Toggle>
+              label="Calorias"
+            />
           </View>
           <TextCustom style={styles.activityLabel}>
             {activityLevel == "exercises"
@@ -133,7 +129,7 @@ function Step2({ route, navigation }) {
             maxLength={2}
             returnKeyType="done"
             textAlign="center"
-            icon={require("../assets/icons/ic_fire.png")}
+            icon={"ic_weight"}
             onChangeText={(value) => setExercisesPerWeek(value)}
             sufix={exercisesPerWeek != 1 ? "exercícios" : "exercício"}
             style={[
@@ -147,7 +143,7 @@ function Step2({ route, navigation }) {
             maxLength={4}
             returnKeyType="done"
             textAlign="center"
-            icon={require("../assets/icons/ic_fire.png")}
+            icon={"ic_placeholder"}
             onChangeText={(value) => setCaloriesPerDay(value)}
             sufix="kcal/dia"
             style={[
@@ -182,10 +178,8 @@ function Step2({ route, navigation }) {
                 userTMB: userTMB,
               })
             }
-            isEmoji={true}
-          >
-            →
-          </FabButtonCustom>
+            icon={"ic_arrow"}
+          />
         </LinearGradient>
       </View>
       <StatusBar style="dark" />

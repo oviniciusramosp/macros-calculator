@@ -78,10 +78,10 @@ function Step3({ route, navigation }) {
               onPress={() => navigation.goBack()}
               isEmoji={false}
               size="small"
-              backgroundColor="gray"
-            >
-              ←
-            </FabButtonCustom>
+              buttonStyle="outlined"
+              icon={"ic_arrow"}
+              iconRotate={180}
+            />
             <View style={styles.margin} />
             <View style={styles.margin} />
             <View style={styles.row}>
@@ -176,10 +176,8 @@ function Step3({ route, navigation }) {
                 goal: pickerGoalSelection,
               })
             }
-            isEmoji={true}
-          >
-            →
-          </FabButtonCustom>
+            icon={"ic_arrow"}
+          />
         </LinearGradient>
       </View>
       <StatusBar style="dark" />
