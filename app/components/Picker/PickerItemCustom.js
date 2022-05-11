@@ -3,11 +3,13 @@ import React from "react";
 import TextCustom from "../TextCustom";
 import colors from "../../config/colors";
 import IconCustom from "../IconCustom";
+import * as Haptics from "expo-haptics";
 
 export default function PickerItemCustom({
   label,
   description,
   icon,
+  iconSize = 28,
   selected,
   iconRotate,
   ...otherProps
@@ -16,13 +18,14 @@ export default function PickerItemCustom({
     <TouchableHighlight
       style={[styles.item, selected ? styles.selected : null]}
       underlayColor={selected ? colors.primaryDark : colors.primaryLight}
+      onPressIn={() => Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Heavy)}
       {...otherProps}
     >
       <View style={styles.row}>
         {icon && (
           <IconCustom
             name={icon}
-            size={28}
+            size={iconSize}
             filled={selected}
             rotate={iconRotate}
             style={styles.icon}

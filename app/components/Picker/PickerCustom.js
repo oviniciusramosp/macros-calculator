@@ -12,10 +12,12 @@ import colors from "../../config/colors";
 import ModalCustom from "../ModalCustom";
 import PickerItemCustom from "./PickerItemCustom";
 import IconCustom from "../IconCustom";
+import * as Haptics from "expo-haptics";
 
 export default function PickerCustom({
   options,
   onChangeSelect,
+  iconListSize,
   placeholder = "Selecionar",
   modalHeader,
   closeButton = false,
@@ -34,6 +36,7 @@ export default function PickerCustom({
         iconRotate={item.iconRotate}
         selected={item.id === itemSelected}
         icon={item.icon}
+        iconSize={iconListSize}
         onPress={() => {
           onChangeSelect(item.id);
           setContent(item.label);
@@ -51,6 +54,7 @@ export default function PickerCustom({
       <TouchableOpacity
         style={styles.picker}
         onPress={() => setModalVisible(true)}
+        onPressIn={() => Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light)}
       >
         <View style={styles.leftPickerLabel}>
           {contentIcon && (

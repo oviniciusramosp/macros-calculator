@@ -18,6 +18,10 @@ import IconPlus from "../assets/icons/IconPlus";
 import IconPause from "../assets/icons/IconPause";
 import IconArrowCircle from "../assets/icons/IconArrowCircle";
 import IconArrowCircleDouble from "../assets/icons/IconArrowCircleDouble";
+import IconSkinny from "../assets/icons/IconSkinny";
+import IconStrong from "../assets/icons/IconStrong";
+import IconFat from "../assets/icons/IconFat";
+import IconFakeSkinny from "../assets/icons/IconFakeSkinny";
 
 export default function IconCustom({
   color = colors.primary,
@@ -85,6 +89,24 @@ export default function IconCustom({
           case "ic_face_serious":
             return (
               <IconFaceSerious
+                color={color}
+                size={size}
+                filled={filled}
+                rotate={rotate}
+              />
+            );
+          case "ic_fake_skinny":
+            return (
+              <IconFakeSkinny
+                color={color}
+                size={size}
+                filled={filled}
+                rotate={rotate}
+              />
+            );
+          case "ic_fat":
+            return (
+              <IconFat
                 color={color}
                 size={size}
                 filled={filled}
@@ -185,6 +207,24 @@ export default function IconCustom({
           // Q
           // R
           // S
+          case "ic_skinny":
+            return (
+              <IconSkinny
+                color={color}
+                size={size}
+                filled={filled}
+                rotate={rotate}
+              />
+            );
+          case "ic_strong":
+            return (
+              <IconStrong
+                color={color}
+                size={size}
+                filled={filled}
+                rotate={rotate}
+              />
+            );
           // T
           // U
           // V

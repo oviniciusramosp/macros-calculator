@@ -27,7 +27,7 @@ function ToggleItem({
           <IconCustom
             size="28"
             name={icon}
-            color={isSelected ? colors.white : colors.grayDark}
+            color={isSelected ? colors.white : colors.grayDarkFaded}
           />
         )}
         {emoji && <TextCustom style={styles.toggleEmoji}>{emoji}</TextCustom>}
@@ -78,7 +78,7 @@ const styles = StyleSheet.create({
     marginHorizontal: 6,
   },
   unselectedLabel: {
-    color: colors.grayDark,
+    color: colors.grayDarkFaded,
   },
 });
 

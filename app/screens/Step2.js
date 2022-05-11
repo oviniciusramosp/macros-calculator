@@ -51,6 +51,7 @@ function Step2({ route, navigation }) {
         return caloriesWithDot(tdee) + " kcal";
       }
       if (exercisesPerWeek >= 22) {
+        isNextButtonDisabled = true;
         return "Fala sério!";
       }
     }
@@ -176,6 +177,7 @@ function Step2({ route, navigation }) {
               navigation.navigate("Step 3", {
                 userTDEE: tdee,
                 userTMB: userTMB,
+                userGender: userGender,
               })
             }
             icon={"ic_arrow"}

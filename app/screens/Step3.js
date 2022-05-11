@@ -11,34 +11,37 @@ import PickerCustom from "../components/Picker/PickerCustom";
 import { LinearGradient } from "expo-linear-gradient";
 
 function Step3({ route, navigation }) {
-  const { userTDEE, userTMB } = route.params;
+  const { userTDEE, userTMB, userGender } = route.params;
   const [pickerStatusSelection, setPickerStatusSelection] = useState(0);
   const [pickerGoalSelection, setPickerGoalSelection] = useState(0);
 
   const pickerStatusOptions = [
     {
       id: "1",
-      label: "Magro",
-      description: "Pouco músculo e gordura",
-      icon: "ic_placeholder",
+      label: userGender == "male" ? "Magro" : "Magra",
+      description: "Pouco músculo e pouca gordura",
+      icon: "ic_skinny",
     },
     {
       id: "2",
-      label: "Falso Magro",
-      description: "Magro mas com gordura localizada",
-      icon: "ic_placeholder",
+      label: userGender == "male" ? "Falso Magro" : "Falsa Magra",
+      description:
+        userGender == "male"
+          ? "Magro mas com gordura localizada"
+          : "Magra mas com gordura localizada",
+      icon: "ic_fake_skinny",
     },
     {
       id: "3",
       label: "Em Forma",
       description: "Massa magra considerável",
-      icon: "ic_placeholder",
+      icon: "ic_strong",
     },
     {
       id: "4",
-      label: "Obeso",
+      label: userGender == "male" ? "Obeso" : "Obesa",
       description: "Excesso de gordura",
-      icon: "ic_placeholder",
+      icon: "ic_fat",
     },
   ];
 
@@ -140,6 +143,7 @@ function Step3({ route, navigation }) {
             onChangeSelect={(id) => {
               setPickerStatusSelection(id);
             }}
+            iconListSize={28}
           ></PickerCustom>
         </Card>
         <Card>
@@ -195,6 +199,9 @@ function Step3({ route, navigation }) {
               navigation.navigate("Step 4", {
                 status: pickerStatusSelection,
                 goal: pickerGoalSelection,
+                userGender: userGender,
+                userTDEE: userTDEE,
+                userTMB: userTMB,
               })
             }
             icon={"ic_arrow"}
