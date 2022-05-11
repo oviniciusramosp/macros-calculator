@@ -18,50 +18,71 @@ function Step3({ route, navigation }) {
   const pickerStatusOptions = [
     {
       id: "1",
-      label: "Pouca Gordura e Pouca Massa Magra",
+      label: "Magro",
+      description: "Pouco músculo e gordura",
+      icon: "ic_placeholder",
     },
     {
       id: "2",
-      label: "Perder Peso Acelerado",
+      label: "Falso Magro",
+      description: "Magro mas com gordura localizada",
+      icon: "ic_placeholder",
     },
     {
       id: "3",
-      label: "Perder Peso",
+      label: "Em Forma",
+      description: "Massa magra considerável",
+      icon: "ic_placeholder",
     },
     {
       id: "4",
-      label: "Manter Peso",
+      label: "Obeso",
+      description: "Excesso de gordura",
+      icon: "ic_placeholder",
     },
   ];
 
   const pickerGoalOptions = [
     {
       id: "1",
-      label: "Definir Superávit Específico",
+      label: "Superávit Específico",
+      description: "Insira o valor manualmente",
+      icon: "ic_plus",
     },
     {
       id: "2",
-      label: "Ganhar Peso Acelerado",
+      label: "Ganhar Peso Rápido",
+      icon: "ic_arrow_circle_double",
+      iconRotate: -90,
     },
     {
       id: "3",
       label: "Ganhar Peso",
+      icon: "ic_arrow_circle",
+      iconRotate: -90,
     },
     {
       id: "4",
       label: "Manter Peso",
+      icon: "ic_pause",
     },
     {
       id: "5",
       label: "Perder Peso",
+      icon: "ic_arrow_circle",
+      iconRotate: 90,
     },
     {
       id: "6",
-      label: "Perder Peso Acelerado",
+      label: "Perder Peso Rápido",
+      icon: "ic_arrow_circle_double",
+      iconRotate: 90,
     },
     {
       id: "7",
-      label: "Definir Défict Específico",
+      label: "Défict Específico",
+      description: "Insira o valor manualmente",
+      icon: "ic_minus",
     },
   ];
 

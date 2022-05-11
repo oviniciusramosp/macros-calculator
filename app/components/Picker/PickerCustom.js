@@ -21,20 +21,24 @@ export default function PickerCustom({
   closeButton = false,
 }) {
   const [content, setContent] = useState(placeholder);
-  const [contentImage, setContentImage] = useState(null);
+  const [contentIcon, setContentIcon] = useState(null);
+  const [contentIconRotate, setContentIconRotate] = useState(null);
   const [modalVisible, setModalVisible] = useState(false);
   const [itemSelected, setItemSelected] = useState("");
 
   function renderOption(item) {
     return (
       <PickerItemCustom
-        itemLabel={item.label}
+        label={item.label}
+        description={item.description}
+        iconRotate={item.iconRotate}
         selected={item.id === itemSelected}
-        itemIconPath={item.icon}
+        icon={item.icon}
         onPress={() => {
           onChangeSelect(item.id);
           setContent(item.label);
-          setContentImage(item.icon);
+          setContentIcon(item.icon);
+          setContentIconRotate(item.iconRotate);
           setModalVisible(false);
           setItemSelected(item.id);
         }}
@@ -49,7 +53,15 @@ export default function PickerCustom({
         onPress={() => setModalVisible(true)}
       >
         <View style={styles.leftPickerLabel}>
-          {/* {contentImage && <Image style={styles.icon} source={contentImage} />} */}
+          {contentIcon && (
+            <IconCustom
+              style={styles.icon}
+              name={contentIcon}
+              size={28}
+              rotate={contentIconRotate}
+              filled={true}
+            />
+          )}
           <TextCustom style={styles.pickerLabel} numberOfLines={1}>
             {content}
           </TextCustom>
@@ -84,13 +96,12 @@ export default function PickerCustom({
 const styles = StyleSheet.create({
   picker: {
     flex: 1,
-    backgroundColor: colors.grayLight,
+    borderColor: colors.fadedGrayLight,
+    borderWidth: 1,
     borderRadius: 12,
     flexDirection: "row",
     alignItems: "center",
     paddingHorizontal: 11,
-    borderWidth: 3,
-    borderColor: colors.grayLight,
     height: 52,
   },
   leftPickerLabel: {
@@ -108,8 +119,6 @@ const styles = StyleSheet.create({
     height: 12,
   },
   icon: {
-    height: 30,
-    width: 30,
     marginRight: 12,
   },
   chevron: { height: 30, width: 30, marginLeft: 12 },

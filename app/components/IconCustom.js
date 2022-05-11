@@ -13,6 +13,11 @@ import IconPlaceholder from "../assets/icons/IconPlaceholder";
 import IconFire from "../assets/icons/IconFire";
 import IconFaceSerious from "../assets/icons/IconFaceSerious";
 import IconChevron from "../assets/icons/IconChevron";
+import IconMinus from "../assets/icons/IconMinus";
+import IconPlus from "../assets/icons/IconPlus";
+import IconPause from "../assets/icons/IconPause";
+import IconArrowCircle from "../assets/icons/IconArrowCircle";
+import IconArrowCircleDouble from "../assets/icons/IconArrowCircleDouble";
 
 export default function IconCustom({
   color = colors.primary,
@@ -20,15 +25,34 @@ export default function IconCustom({
   name,
   rotate,
   filled = false,
+  style,
 }) {
   return (
-    <View>
+    <View style={style}>
       {(() => {
         switch (name) {
           // A
           case "ic_arrow":
             return (
               <IconArrow
+                color={color}
+                size={size}
+                filled={filled}
+                rotate={rotate}
+              />
+            );
+          case "ic_arrow_circle":
+            return (
+              <IconArrowCircle
+                color={color}
+                size={size}
+                filled={filled}
+                rotate={rotate}
+              />
+            );
+          case "ic_arrow_circle_double":
+            return (
+              <IconArrowCircleDouble
                 color={color}
                 size={size}
                 filled={filled}
@@ -119,12 +143,39 @@ export default function IconCustom({
                 rotate={rotate}
               />
             );
+          case "ic_minus":
+            return (
+              <IconMinus
+                color={color}
+                size={size}
+                filled={filled}
+                rotate={rotate}
+              />
+            );
           // N
           // O
           // P
+          case "ic_pause":
+            return (
+              <IconPause
+                color={color}
+                size={size}
+                filled={filled}
+                rotate={rotate}
+              />
+            );
           case "ic_placeholder":
             return (
               <IconPlaceholder
+                color={color}
+                size={size}
+                filled={filled}
+                rotate={rotate}
+              />
+            );
+          case "ic_plus":
+            return (
+              <IconPlus
                 color={color}
                 size={size}
                 filled={filled}
