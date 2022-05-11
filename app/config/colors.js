@@ -1,7 +1,7 @@
 export default {
   primary: "#006AFF",
-  primaryLight: "#C7C5E9",
-  primaryDark: "#201E5F",
+  primaryLight: "#D6E7FF",
+  primaryDark: "#0052C6",
   primaryFaded: "#8C7F8E",
   white: "#fff",
   grayLight: "#rgba(242,242,245,1)",
