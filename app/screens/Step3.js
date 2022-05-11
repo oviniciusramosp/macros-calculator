@@ -39,7 +39,7 @@ function Step3({ route, navigation }) {
     },
     {
       id: "4",
-      label: userGender == "male" ? "Obeso" : "Obesa",
+      label: "Sobrepeso",
       description: "Excesso de gordura",
       icon: "ic_fat",
     },

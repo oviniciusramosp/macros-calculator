@@ -20,10 +20,10 @@ export default function Step4({ route, navigation }) {
               onPress={() => navigation.goBack()}
               isEmoji={false}
               size="small"
-              backgroundColor="gray"
-            >
-              ←
-            </FabButtonCustom>
+              buttonStyle="outlined"
+              icon="ic_arrow"
+              iconRotate={180}
+            />
             <View style={styles.margin} />
             <View style={styles.margin} />
             <View style={styles.row}>
