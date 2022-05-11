@@ -11,6 +11,7 @@ import TextCustom from "../TextCustom";
 import colors from "../../config/colors";
 import ModalCustom from "../ModalCustom";
 import PickerItemCustom from "./PickerItemCustom";
+import IconCustom from "../IconCustom";
 
 export default function PickerCustom({
   options,
@@ -48,18 +49,15 @@ export default function PickerCustom({
         onPress={() => setModalVisible(true)}
       >
         <View style={styles.leftPickerLabel}>
-          {contentImage && <Image style={styles.icon} source={contentImage} />}
+          {/* {contentImage && <Image style={styles.icon} source={contentImage} />} */}
           <TextCustom style={styles.pickerLabel} numberOfLines={1}>
             {content}
           </TextCustom>
         </View>
-        <Image
-          style={styles.chevron}
-          source={
-            modalVisible
-              ? require("../../assets/icons/ic_chevron_up.png")
-              : require("../../assets/icons/ic_chevron_down.png")
-          }
+        <IconCustom
+          name={"ic_chevron"}
+          rotate={modalVisible ? 180 : 0}
+          size={28}
         />
       </TouchableOpacity>
       <ModalCustom
