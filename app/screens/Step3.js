@@ -11,19 +11,20 @@ import PickerCustom from "../components/Picker/PickerCustom";
 import { LinearGradient } from "expo-linear-gradient";
 
 function Step3({ route, navigation }) {
-  const { userTDEE, userTMB, userGender } = route.params;
+  const { userTDEE, userTMB, userGender, userWeight, userAge } = route.params;
   const [pickerStatusSelection, setPickerStatusSelection] = useState(0);
   const [pickerGoalSelection, setPickerGoalSelection] = useState(0);
+  const [calories, setCalories] = useState(0);
 
   const pickerStatusOptions = [
     {
-      id: "1",
+      id: 1,
       label: userGender == "male" ? "Magro" : "Magra",
       description: "Pouco músculo e pouca gordura",
       icon: "ic_skinny",
     },
     {
-      id: "2",
+      id: 2,
       label: userGender == "male" ? "Falso Magro" : "Falsa Magra",
       description:
         userGender == "male"
@@ -32,13 +33,13 @@ function Step3({ route, navigation }) {
       icon: "ic_fake_skinny",
     },
     {
-      id: "3",
+      id: 3,
       label: "Em Forma",
       description: "Massa magra considerável",
       icon: "ic_strong",
     },
     {
-      id: "4",
+      id: 4,
       label: "Sobrepeso",
       description: "Excesso de gordura",
       icon: "ic_fat",
@@ -47,42 +48,42 @@ function Step3({ route, navigation }) {
 
   const pickerGoalOptions = [
     {
-      id: "1",
+      id: 1,
       label: "Superávit Específico",
       description: "Insira o valor manualmente",
       icon: "ic_plus",
     },
     {
-      id: "2",
+      id: 2,
       label: "Ganhar Peso Rápido",
       icon: "ic_arrow_circle_double",
       iconRotate: -90,
     },
     {
-      id: "3",
+      id: 3,
       label: "Ganhar Peso",
       icon: "ic_arrow_circle",
       iconRotate: -90,
     },
     {
-      id: "4",
+      id: 4,
       label: "Manter Peso",
       icon: "ic_pause",
     },
     {
-      id: "5",
+      id: 5,
       label: "Perder Peso",
       icon: "ic_arrow_circle",
       iconRotate: 90,
     },
     {
-      id: "6",
+      id: 6,
       label: "Perder Peso Rápido",
       icon: "ic_arrow_circle_double",
       iconRotate: 90,
     },
     {
-      id: "7",
+      id: 7,
       label: "Défict Específico",
       description: "Insira o valor manualmente",
       icon: "ic_minus",
@@ -97,7 +98,7 @@ function Step3({ route, navigation }) {
     <SafeAreaView style={styles.container}>
       <ScrollView contentContainerStyle={styles.list}>
         <Card>
-          <View style={styles.tbmContent}>
+          <View style={[styles.row, styles.horizontalCentered]}>
             <FabButtonCustom
               onPress={() => navigation.goBack()}
               isEmoji={false}
@@ -153,29 +154,16 @@ function Step3({ route, navigation }) {
             options={pickerGoalOptions}
             onChangeSelect={(id) => {
               setPickerGoalSelection(id);
-              console.log(pickerGoalSelection);
             }}
           />
-          {pickerGoalSelection == 7 ? (
+          {pickerGoalSelection == 7 || pickerGoalSelection == 1 ? (
             <TextInputCustom
               placeholder="0"
               keyboardType="number-pad"
               maxLength={4}
               returnKeyType="done"
               textAlign="center"
-              onChangeText={(value) => value}
-              sufix={"kcal"}
-              style={styles.kcalInput}
-            />
-          ) : null}
-          {pickerGoalSelection == 1 ? (
-            <TextInputCustom
-              placeholder="0"
-              keyboardType="number-pad"
-              maxLength={4}
-              returnKeyType="done"
-              textAlign="center"
-              onChangeText={(value) => value}
+              onChangeText={(value) => setCalories(value)}
               sufix={"kcal"}
               style={styles.kcalInput}
             />
@@ -197,11 +185,14 @@ function Step3({ route, navigation }) {
             }
             onPress={() =>
               navigation.navigate("Step 4", {
-                status: pickerStatusSelection,
-                goal: pickerGoalSelection,
+                userStatus: pickerStatusSelection,
+                userGoal: pickerGoalSelection,
                 userGender: userGender,
                 userTDEE: userTDEE,
                 userTMB: userTMB,
+                calories: calories,
+                userWeight: userWeight,
+                userAge: userAge,
               })
             }
             icon={"ic_arrow"}
@@ -226,17 +217,15 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: "row",
   },
+  horizontalCentered: {
+    alignItems: "center",
+  },
   margin: {
     height: 24,
     width: 12,
   },
   caloriesHeader: {
     alignItems: "flex-end",
-  },
-  tbmContent: {
-    flex: 1,
-    flexDirection: "row",
-    alignItems: "center",
   },
   tbmIcon: {
     backgroundColor: colors.grayLight,
@@ -253,11 +242,6 @@ const styles = StyleSheet.create({
   },
   colorPrimary: {
     color: colors.primary,
-  },
-  tdeeContent: {
-    flex: 1,
-    flexDirection: "row",
-    alignItems: "center",
   },
   tdeeIcon: {
     backgroundColor: colors.grayLight,

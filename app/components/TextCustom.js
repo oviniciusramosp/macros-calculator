@@ -8,6 +8,8 @@ import LoadingScreen from "../screens/LoadingScreen";
 function TextCustom({
   children,
   style,
+  color,
+  fontSize,
   fontWeight = "Regular",
   ...otherProps
 }) {
@@ -24,6 +26,8 @@ function TextCustom({
     <Text
       style={[
         fontWeight == "Semi Bold" ? styles.interSemiBold : styles.inter,
+        { color: color },
+        { fontSize: fontSize },
         style,
       ]}
       {...otherProps}
