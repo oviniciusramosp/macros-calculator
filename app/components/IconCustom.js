@@ -22,6 +22,11 @@ import IconSkinny from "../assets/icons/IconSkinny";
 import IconStrong from "../assets/icons/IconStrong";
 import IconFat from "../assets/icons/IconFat";
 import IconFakeSkinny from "../assets/icons/IconFakeSkinny";
+import IconApple from "../assets/icons/IconApple";
+import IconChicken from "../assets/icons/IconChicken";
+import IconCroissant from "../assets/icons/IconCroissant";
+import IconPeanuts from "../assets/icons/IconPeanuts";
+import IconWaterCup from "../assets/icons/IconWaterCup";
 
 export default function IconCustom({
   color = colors.primary,
@@ -36,6 +41,15 @@ export default function IconCustom({
       {(() => {
         switch (name) {
           // A
+          case "ic_apple":
+            return (
+              <IconApple
+                color={color}
+                size={size}
+                filled={filled}
+                rotate={rotate}
+              />
+            );
           case "ic_arrow":
             return (
               <IconArrow
@@ -77,6 +91,24 @@ export default function IconCustom({
           case "ic_chevron":
             return (
               <IconChevron
+                color={color}
+                size={size}
+                filled={filled}
+                rotate={rotate}
+              />
+            );
+          case "ic_chicken":
+            return (
+              <IconChicken
+                color={color}
+                size={size}
+                filled={filled}
+                rotate={rotate}
+              />
+            );
+          case "ic_croissant":
+            return (
+              <IconCroissant
                 color={color}
                 size={size}
                 filled={filled}
@@ -186,6 +218,15 @@ export default function IconCustom({
                 rotate={rotate}
               />
             );
+          case "ic_peanuts":
+            return (
+              <IconPeanuts
+                color={color}
+                size={size}
+                filled={filled}
+                rotate={rotate}
+              />
+            );
           case "ic_placeholder":
             return (
               <IconPlaceholder
@@ -229,6 +270,15 @@ export default function IconCustom({
           // U
           // V
           // W
+          case "ic_water_cup":
+            return (
+              <IconWaterCup
+                color={color}
+                size={size}
+                filled={filled}
+                rotate={rotate}
+              />
+            );
           case "ic_weight":
             return (
               <IconWeight

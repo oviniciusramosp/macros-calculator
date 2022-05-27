@@ -188,6 +188,8 @@ function Step1({ navigation }) {
               navigation.navigate("Step 2", {
                 userTMB: tMB,
                 userGender: gender,
+                userWeight: weight,
+                userAge: age,
               })
             }
             icon={"ic_arrow"}

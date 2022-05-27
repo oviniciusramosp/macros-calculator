@@ -18,6 +18,7 @@ function FabButtonCustom({
   buttonStyle = "contained",
   size = "default",
   backgroundColor = "primary",
+  style,
   ...otherProps
 }) {
   return (
@@ -36,6 +37,7 @@ function FabButtonCustom({
           otherProps.disabled === true
             ? styles.buttonDisabled
             : styles.buttonEnabled,
+          style,
         ]}
         underlayColor={
           buttonStyle === "outlined"

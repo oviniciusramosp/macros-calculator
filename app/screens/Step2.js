@@ -11,7 +11,7 @@ import TextCustom from "../components/TextCustom";
 import { LinearGradient } from "expo-linear-gradient";
 
 function Step2({ route, navigation }) {
-  const { userTMB, userGender } = route.params;
+  const { userTMB, userGender, userWeight, userAge } = route.params;
   const [activityLevel, setActivityLevel] = useState("exercises");
   const [exercisesPerWeek, setExercisesPerWeek] = useState(0);
   const [caloriesPerDay, setCaloriesPerDay] = useState(0);
@@ -178,6 +178,8 @@ function Step2({ route, navigation }) {
                 userTDEE: tdee,
                 userTMB: userTMB,
                 userGender: userGender,
+                userWeight: userWeight,
+                userAge: userAge,
               })
             }
             icon={"ic_arrow"}
