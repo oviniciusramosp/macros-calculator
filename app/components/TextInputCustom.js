@@ -12,10 +12,10 @@ import TextCustom from "../components/TextCustom";
 import IconCustom from "./IconCustom";
 
 function TextInputCustom({
-  children,
   icon = "ic_placeholder",
   sufix,
   style,
+  label,
   ...otherProps
 }) {
   const [content, onChangeContent] = useState();
@@ -32,9 +32,9 @@ function TextInputCustom({
       onPress={focusInput}
       activeOpacity={1}
     >
-      {children && (
+      {label && (
         <TextCustom fontWeight="Semi Bold" style={styles.label}>
-          {children}
+          {label}
         </TextCustom>
       )}
       <View

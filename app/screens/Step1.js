@@ -1,5 +1,12 @@
-import React, { useState } from "react";
-import { SafeAreaView, ScrollView, StyleSheet, View } from "react-native";
+import React, { useState, useContext, useEffect } from "react";
+import {
+  SafeAreaView,
+  ScrollView,
+  StyleSheet,
+  View,
+  Alert,
+} from "react-native";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 // expo libraries
 import { StatusBar } from "expo-status-bar";
 import { LinearGradient } from "expo-linear-gradient";
@@ -14,46 +21,46 @@ import FabButtonCustom from "../components/FabButtonCustom";
 import TextCustom from "../components/TextCustom";
 import IconCustom from "../components/IconCustom";
 
+import { UserData } from "../contexts/userdata";
+
 function Step1({ navigation }) {
-  const [gender, setGender] = useState("none");
-  const [height, setHeight] = useState();
-  const [weight, setWeight] = useState();
-  const [age, setAge] = useState();
-  var tMB = 0;
+  const {
+    numberWithDot,
+    user,
+    setUserGender,
+    setUserHeight,
+    setUserWeight,
+    setUserAge,
+    setUserTMB,
+  } = useContext(UserData);
+
   var isNextButtonDisabled = true;
 
   const maleTMB = Math.round(
-    66.5 + 13.75 * weight + 5.003 * height - 6.75 * age
+    //Mifflin (1990)
+    10 * user.weight + 6.25 * user.height - 5 * user.age + 5
+    // Harris Benedict (1919)
+    //66.5 + 13.75 * weight + 5.003 * height - 6.75 * age
   );
 
   const femaleTMB = Math.round(
-    655.1 + 9.563 * weight + 1.85 * height - 4.676 * age
+    //Mifflin (1990)
+    10 * user.weight + 6.25 * user.height - 5 * user.age - 161
+    // Harris Benedict (1919)
+    //655.1 + 9.563 * weight + 1.85 * height - 4.676 * age
   );
 
-  const setToggleGender = function (genderValue) {
-    if (gender === genderValue) {
-      setGender("none");
-    } else {
-      setGender(genderValue);
-    }
-  };
-
-  function caloriesWithDot(value) {
-    return value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
-  }
-
   function calculate() {
-    if (height > 0 && weight > 0 && age > 10) {
+    if (user.height > 0 && user.weight > 0 && user.age > 10) {
       isNextButtonDisabled = false;
-      if (gender === "male") {
-        tMB = maleTMB;
-        return caloriesWithDot(maleTMB) + " kcal";
+      if (user.gender == "male") {
+        setUserTMB(maleTMB);
       } else {
-        tMB = femaleTMB;
-        return caloriesWithDot(femaleTMB) + " kcal";
+        setUserTMB(femaleTMB);
       }
+      return numberWithDot(user.tmb) + " kcal";
     } else {
-      tMB = 0;
+      setUserTMB(0);
     }
   }
 
@@ -66,17 +73,15 @@ function Step1({ navigation }) {
             <Header>Selecione seu Gênero</Header>
             <View style={styles.row}>
               <Toggle
-                onPress={() => setToggleGender("male")}
-                isSelected={gender === "male" ? true : false}
+                onPress={() => setUserGender("male")}
+                isSelected={user.gender == "male" ? true : false}
                 icon="ic_male"
               />
               <View style={styles.margin} />
               <Toggle
-                onPress={() => setToggleGender("female")}
-                // emoji="👩"
-                // label="test"
+                onPress={() => setUserGender("female")}
                 icon="ic_female"
-                isSelected={gender === "female" ? true : false}
+                isSelected={user.gender == "female" ? true : false}
               />
             </View>
           </Card>
@@ -85,45 +90,45 @@ function Step1({ navigation }) {
             <Header>Suas Medidas</Header>
             <View style={styles.row}>
               <TextInputCustom
+                label="Altura"
                 maxLength={3}
                 placeholder="000"
                 keyboardType="number-pad"
                 returnKeyType="done"
                 textAlign="center"
-                onChangeText={(value) => setHeight(value)}
+                value={user.height}
+                onChangeText={(value) => setUserHeight(value)}
                 sufix="cm"
                 icon="ic_height"
-              >
-                Altura
-              </TextInputCustom>
+              />
               <View style={styles.margin} />
               <TextInputCustom
+                label="Peso"
                 maxLength={3}
                 placeholder="000"
                 keyboardType="number-pad"
                 returnKeyType="done"
                 textAlign="center"
-                onChangeText={(value) => setWeight(value)}
+                value={user.weight}
+                onChangeText={(value) => setUserWeight(value)}
                 sufix="kg"
                 icon="ic_weight"
-              >
-                Peso
-              </TextInputCustom>
+              />
             </View>
             <View style={styles.margin} />
             <View style={styles.row}>
               <TextInputCustom
+                label="Idade"
                 maxLength={3}
                 placeholder="00"
                 keyboardType="number-pad"
                 returnKeyType="done"
                 textAlign="center"
-                onChangeText={(value) => setAge(value)}
+                value={user.age}
+                onChangeText={(value) => setUserAge(value)}
                 sufix="anos"
                 icon="ic_cake"
-              >
-                Idade
-              </TextInputCustom>
+              />
               <View style={styles.margin} />
               <View style={styles.whiteSpace} />
             </View>
@@ -132,7 +137,7 @@ function Step1({ navigation }) {
           <Card>
             <Header style={styles.colorPrimary}>Taxa Metabólica Basal</Header>
 
-            {gender === "none" ? (
+            {user.gender === "none" ? (
               <View style={styles.tbmContent}>
                 <View style={styles.tbmIcon}>
                   <IconCustom
@@ -145,7 +150,7 @@ function Step1({ navigation }) {
                   Selecione um Gênero
                 </TextCustom>
               </View>
-            ) : height > 250 || weight > 300 || age > 110 ? (
+            ) : user.height > 250 || user.weight > 300 || user.age > 110 ? (
               <View style={styles.tbmContent}>
                 <View style={styles.tbmIcon}>
                   <IconCustom name={"ic_face_serious"} size="28" />
@@ -154,7 +159,7 @@ function Step1({ navigation }) {
                   Eu sou uma piada para você?
                 </TextCustom>
               </View>
-            ) : height > 0 && weight > 0 && age > 10 ? (
+            ) : user.height > 0 && user.weight > 0 && user.age > 10 ? (
               <View style={styles.tbmContent}>
                 <View style={styles.tbmIcon}>
                   <IconCustom name={"ic_fire"} size="28" />
@@ -186,10 +191,9 @@ function Step1({ navigation }) {
             disabled={isNextButtonDisabled}
             onPress={() =>
               navigation.navigate("Step 2", {
-                userTMB: tMB,
-                userGender: gender,
-                userWeight: weight,
-                userAge: age,
+                userGender: user.gender,
+                userWeight: user.weight,
+                userAge: user.age,
               })
             }
             icon={"ic_arrow"}

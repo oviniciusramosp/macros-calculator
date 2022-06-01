@@ -1,54 +1,53 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import { SafeAreaView, ScrollView, View, StyleSheet } from "react-native";
+import { StatusBar } from "expo-status-bar";
+import { LinearGradient } from "expo-linear-gradient";
+import colors from "../config/colors";
 import Card from "../components/Card";
 import FabButtonCustom from "../components/FabButtonCustom";
 import Header from "../components/Header";
-import { StatusBar } from "expo-status-bar";
-import colors from "../config/colors";
 import Toggle from "../components/ToggleItem";
-import TextInputCustom from "../components/TextInputCustom";
 import TextCustom from "../components/TextCustom";
-import { LinearGradient } from "expo-linear-gradient";
+import NumberInputCustom from "../components/NumberInputCustom";
+
+import { UserData } from "../contexts/userdata";
 
 function Step2({ route, navigation }) {
-  const { userTMB, userGender, userWeight, userAge } = route.params;
+  const {} = route.params;
+  const { numberWithDot, user, setUserTDEE } = useContext(UserData);
+
   const [activityLevel, setActivityLevel] = useState("exercises");
   const [exercisesPerWeek, setExercisesPerWeek] = useState(0);
   const [caloriesPerDay, setCaloriesPerDay] = useState(0);
 
-  var tdee = 0;
   var isNextButtonDisabled = true;
-
-  function caloriesWithDot(value) {
-    return value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
-  }
 
   function calculateTDEE() {
     if (activityLevel == "exercises") {
       isNextButtonDisabled = false;
       if (exercisesPerWeek <= 1) {
-        tdee = Math.round(userTMB * 1.2);
-        return caloriesWithDot(tdee) + " kcal";
+        setUserTDEE(Math.floor(user.tmb * 1.2));
+        return numberWithDot(user.tdee) + " kcal";
       }
       if (exercisesPerWeek >= 2 && exercisesPerWeek <= 3) {
-        tdee = Math.round(userTMB * 1.3);
-        return caloriesWithDot(tdee) + " kcal";
+        setUserTDEE(Math.floor(user.tmb * 1.3));
+        return numberWithDot(user.tdee) + " kcal";
       }
       if (exercisesPerWeek >= 4 && exercisesPerWeek <= 6) {
-        tdee = Math.round(userTMB * 1.42);
-        return caloriesWithDot(tdee) + " kcal";
+        setUserTDEE(Math.floor(user.tmb * 1.42));
+        return numberWithDot(user.tdee) + " kcal";
       }
       if (exercisesPerWeek >= 7 && exercisesPerWeek <= 8) {
-        tdee = Math.round(userTMB * 1.55);
-        return caloriesWithDot(tdee) + " kcal";
+        setUserTDEE(Math.floor(user.tmb * 1.55));
+        return numberWithDot(user.tdee) + " kcal";
       }
       if (exercisesPerWeek >= 9 && exercisesPerWeek <= 10) {
-        tdee = Math.round(userTMB * 1.8);
-        return caloriesWithDot(tdee) + " kcal";
+        setUserTDEE(Math.floor(user.tmb * 1.8));
+        return numberWithDot(user.tdee) + " kcal";
       }
       if (exercisesPerWeek >= 11 && exercisesPerWeek <= 21) {
-        tdee = Math.round(userTMB * 2);
-        return caloriesWithDot(tdee) + " kcal";
+        setUserTDEE(Math.floor(user.tmb * 2));
+        return numberWithDot(user.tdee) + " kcal";
       }
       if (exercisesPerWeek >= 22) {
         isNextButtonDisabled = true;
@@ -57,8 +56,8 @@ function Step2({ route, navigation }) {
     }
     if (activityLevel == "calories") {
       isNextButtonDisabled = false;
-      tdee = Math.round(userTMB * 1.1 + caloriesPerDay * 1);
-      return caloriesWithDot(tdee) + " kcal";
+      setUserTDEE(Math.floor(user.tmb * 1.1 + caloriesPerDay * 1));
+      return numberWithDot(user.tdee) + " kcal";
     } else {
       isNextButtonDisabled = true;
     }
@@ -66,10 +65,10 @@ function Step2({ route, navigation }) {
 
   function tdeeIcon() {
     if (exercisesPerWeek < 22) {
-      if (userGender == "male") {
+      if (user.gender == "male") {
         return "🧔‍♂️";
       }
-      if (userGender == "female") {
+      if (user.gender == "female") {
         return "👩";
       }
     } else {
@@ -100,7 +99,7 @@ function Step2({ route, navigation }) {
               TMB{" "}
             </TextCustom>
             <TextCustom fontWeight="Semi Bold" style={styles.tbmLabel}>
-              {userTMB.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".")} kcal
+              {numberWithDot(user.tmb)} kcal
             </TextCustom>
           </View>
         </Card>
@@ -124,29 +123,27 @@ function Step2({ route, navigation }) {
               ? "Insira o número de vezes que você se exercita durante a semana."
               : "Insira a quantidade média de calorias que você queima em atividade por dia."}
           </TextCustom>
-          <TextInputCustom
-            placeholder="0"
-            keyboardType="number-pad"
+          <NumberInputCustom
             maxLength={2}
+            content={exercisesPerWeek}
+            onChangeContent={(value) => setExercisesPerWeek(value)}
             returnKeyType="done"
-            textAlign="center"
-            icon={"ic_weight"}
-            onChangeText={(value) => setExercisesPerWeek(value)}
-            sufix={exercisesPerWeek != 1 ? "exercícios" : "exercício"}
+            sufix={
+              exercisesPerWeek != 1 ? "exercícios/semana" : "exercício/semana"
+            }
             style={[
               styles.activityInput,
               activityLevel != "exercises" ? styles.hide : null,
             ]}
           />
-          <TextInputCustom
-            placeholder="0"
-            keyboardType="number-pad"
+          <NumberInputCustom
             maxLength={4}
+            content={caloriesPerDay}
+            onChangeContent={(value) => setCaloriesPerDay(value)}
             returnKeyType="done"
-            textAlign="center"
-            icon={"ic_placeholder"}
-            onChangeText={(value) => setCaloriesPerDay(value)}
-            sufix="kcal/dia"
+            sufix={"kcal/dia"}
+            valueToAdd={50}
+            maxValue={9999}
             style={[
               styles.activityInput,
               activityLevel == "exercises" ? styles.hide : null,
@@ -173,15 +170,7 @@ function Step2({ route, navigation }) {
         >
           <FabButtonCustom
             disabled={isNextButtonDisabled}
-            onPress={() =>
-              navigation.navigate("Step 3", {
-                userTDEE: tdee,
-                userTMB: userTMB,
-                userGender: userGender,
-                userWeight: userWeight,
-                userAge: userAge,
-              })
-            }
+            onPress={() => navigation.navigate("Step 3", {})}
             icon={"ic_arrow"}
           />
         </LinearGradient>

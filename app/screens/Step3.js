@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import { SafeAreaView, ScrollView, View, StyleSheet } from "react-native";
 import Card from "../components/Card";
 import FabButtonCustom from "../components/FabButtonCustom";
@@ -10,24 +10,26 @@ import TextCustom from "../components/TextCustom";
 import PickerCustom from "../components/Picker/PickerCustom";
 import { LinearGradient } from "expo-linear-gradient";
 
+import { UserData } from "../contexts/userdata";
+
 function Step3({ route, navigation }) {
-  const { userTDEE, userTMB, userGender, userWeight, userAge } = route.params;
-  const [pickerStatusSelection, setPickerStatusSelection] = useState(0);
-  const [pickerGoalSelection, setPickerGoalSelection] = useState(0);
-  const [calories, setCalories] = useState(0);
+  const {} = route.params;
+
+  const { numberWithDot, user, setUserStatus, setUserGoal, setCalDiference } =
+    useContext(UserData);
 
   const pickerStatusOptions = [
     {
       id: 1,
-      label: userGender == "male" ? "Magro" : "Magra",
+      label: user.gender == "male" ? "Magro" : "Magra",
       description: "Pouco músculo e pouca gordura",
       icon: "ic_skinny",
     },
     {
       id: 2,
-      label: userGender == "male" ? "Falso Magro" : "Falsa Magra",
+      label: user.gender == "male" ? "Falso Magro" : "Falsa Magra",
       description:
-        userGender == "male"
+        user.gender == "male"
           ? "Magro mas com gordura localizada"
           : "Magra mas com gordura localizada",
       icon: "ic_fake_skinny",
@@ -56,6 +58,7 @@ function Step3({ route, navigation }) {
     {
       id: 2,
       label: "Ganhar Peso Rápido",
+      description: "a",
       icon: "ic_arrow_circle_double",
       iconRotate: -90,
     },
@@ -79,6 +82,7 @@ function Step3({ route, navigation }) {
     {
       id: 6,
       label: "Perder Peso Rápido",
+      description: "Pode perder massa magra junto",
       icon: "ic_arrow_circle_double",
       iconRotate: 90,
     },
@@ -89,10 +93,6 @@ function Step3({ route, navigation }) {
       icon: "ic_minus",
     },
   ];
-
-  function caloriesWithDot(value) {
-    return value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
-  }
 
   return (
     <SafeAreaView style={styles.container}>
@@ -127,10 +127,10 @@ function Step3({ route, navigation }) {
               <View style={styles.margin} />
               <View style={styles.caloriesHeader}>
                 <TextCustom fontWeight="Semi Bold" style={styles.tbmLabel}>
-                  {caloriesWithDot(userTMB)} kcal
+                  {numberWithDot(user.tmb)} kcal
                 </TextCustom>
                 <TextCustom fontWeight="Semi Bold" style={styles.tbmLabel}>
-                  {caloriesWithDot(userTDEE)} kcal
+                  {numberWithDot(user.tdee)} kcal
                 </TextCustom>
               </View>
             </View>
@@ -140,9 +140,10 @@ function Step3({ route, navigation }) {
           <Header>Estado Atual</Header>
           <PickerCustom
             placeholder="Selecione seu Estado Atual"
+            header="Selecione o mais próximo"
             options={pickerStatusOptions}
             onChangeSelect={(id) => {
-              setPickerStatusSelection(id);
+              setUserStatus(id);
             }}
             iconListSize={28}
           ></PickerCustom>
@@ -153,17 +154,17 @@ function Step3({ route, navigation }) {
             placeholder="Selecione seu Objetivo"
             options={pickerGoalOptions}
             onChangeSelect={(id) => {
-              setPickerGoalSelection(id);
+              setUserGoal(id);
             }}
           />
-          {pickerGoalSelection == 7 || pickerGoalSelection == 1 ? (
+          {user.goal == 7 || user.goal == 1 ? (
             <TextInputCustom
               placeholder="0"
               keyboardType="number-pad"
               maxLength={4}
               returnKeyType="done"
               textAlign="center"
-              onChangeText={(value) => setCalories(value)}
+              onChangeText={(value) => setCalDiference(value)}
               sufix={"kcal"}
               style={styles.kcalInput}
             />
@@ -178,23 +179,8 @@ function Step3({ route, navigation }) {
           locations={[0, 0.5]}
         >
           <FabButtonCustom
-            disabled={
-              pickerGoalSelection > 0 && pickerStatusSelection > 0
-                ? false
-                : true
-            }
-            onPress={() =>
-              navigation.navigate("Step 4", {
-                userStatus: pickerStatusSelection,
-                userGoal: pickerGoalSelection,
-                userGender: userGender,
-                userTDEE: userTDEE,
-                userTMB: userTMB,
-                calories: calories,
-                userWeight: userWeight,
-                userAge: userAge,
-              })
-            }
+            disabled={user.goal > 0 && user.status > 0 ? false : true}
+            onPress={() => navigation.navigate("Step 4", {})}
             icon={"ic_arrow"}
           />
         </LinearGradient>
