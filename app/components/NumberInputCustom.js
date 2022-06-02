@@ -20,7 +20,6 @@ function NumberInputCustom({
   minValue = 0,
   ...otherProps
 }) {
-  // const [content, onChangeContent] = useState(0);
   const [isActive, setActive] = useState(false);
   const [isPressingMinus, setIsPressingMinus] = useState(false);
   const [isPressingPlus, setIsPressingPlus] = useState(false);
@@ -33,11 +32,13 @@ function NumberInputCustom({
 
   function sumValue() {
     var newValue = content * 1 + valueToAdd;
+    if (newValue > maxValue) newValue = maxValue;
     onChangeContent(newValue.toString());
   }
 
   function subtractValue() {
     var newValue = content * 1 - valueToAdd;
+    if (newValue < minValue) newValue = minValue;
     onChangeContent(newValue.toString());
   }
 
@@ -79,7 +80,7 @@ function NumberInputCustom({
             placeholderTextColor={colors.grayDark}
             enablesReturnKeyAutomatically={true}
             ref={textInputContent}
-            value={content}
+            value={content.toString()}
             maxLength={3}
             placeholder="0"
             keyboardType="number-pad"
