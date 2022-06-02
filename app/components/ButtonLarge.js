@@ -1,6 +1,7 @@
 import React from "react";
 import { StyleSheet, TouchableHighlight, Text } from "react-native";
 import colors from "../config/colors";
+import TextCustom from "./TextCustom";
 
 function ButtonLarge({ children, onPress, isEmoji = false, ...otherProps }) {
   return (
@@ -10,11 +11,9 @@ function ButtonLarge({ children, onPress, isEmoji = false, ...otherProps }) {
       underlayColor={colors.primaryDark}
       {...otherProps}
     >
-      <Text
-        style={(isEmoji = true ? styles.buttonEmojiLabel : styles.buttonLabel)}
-      >
+      <TextCustom fontSize={16} color={colors.white} fontWeight="Semi Bold">
         {children}
-      </Text>
+      </TextCustom>
     </TouchableHighlight>
   );
 }
@@ -26,16 +25,6 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     borderRadius: 12,
-  },
-  buttonEmojiLabel: {
-    color: colors.white,
-    fontSize: 30,
-    fontWeight: "600",
-  },
-  buttonLabel: {
-    color: colors.white,
-    fontSize: 16,
-    fontWeight: "600",
   },
 });
 
