@@ -1,7 +1,9 @@
 // react
-import React, { useContext, useEffect } from "react";
+import React, { useContext, useEffect, useRef } from "react";
 import { SafeAreaView, ScrollView, View, StyleSheet } from "react-native";
+import { captureRef } from "react-native-view-shot";
 // expo libraries
+import { LinearGradient } from "expo-linear-gradient";
 import { StatusBar } from "expo-status-bar";
 // styles
 import colors from "../config/colors";
@@ -13,6 +15,7 @@ import TextCustom from "../components/TextCustom";
 // data
 import { UserData } from "../contexts/userdata";
 import Summary from "../components/Summary";
+import FabButtonCustom from "../components/FabButtonCustom";
 
 export default function Step4({ navigation }) {
   const { numberWithDot, user, setTotalCalGoal } = useContext(UserData);
@@ -74,6 +77,27 @@ export default function Step4({ navigation }) {
 
   const fiberGrams = Math.round(totalGoalCalories / 100);
 
+  function useCapture() {
+    const screenshotView = useRef();
+
+    function onCapture() {
+      captureRef(screenshotView, {
+        format: "jpg",
+        quality: 0.9,
+      }).then(
+        (uri) => alert(uri),
+        (error) => alert("Oops, snapshot failed", error)
+      );
+    }
+
+    return {
+      screenshotView,
+      onCapture,
+    };
+  }
+
+  const { screenshotView, onCapture } = useCapture();
+
   function MacroRow({
     title,
     grams,
@@ -116,7 +140,7 @@ export default function Step4({ navigation }) {
 
   return (
     <SafeAreaView style={styles.container}>
-      <ScrollView contentContainerStyle={styles.list}>
+      <ScrollView contentContainerStyle={styles.list} ref={screenshotView}>
         <Summary backFunction={() => navigation.goBack()} />
         {/* MACROS */}
         <Card padding={0}>
@@ -165,6 +189,15 @@ export default function Step4({ navigation }) {
           />
         </Card>
       </ScrollView>
+      <View>
+        <LinearGradient
+          style={styles.fab}
+          colors={colors.grayLightGradient}
+          locations={[0, 0.5]}
+        >
+          <FabButtonCustom onPress={() => onCapture()} icon={"ic_arrow"} />
+        </LinearGradient>
+      </View>
       <StatusBar style="dark" />
     </SafeAreaView>
   );
@@ -208,5 +241,13 @@ const styles = StyleSheet.create({
     color: colors.grayDark,
     marginTop: 4,
     lineHeight: 16,
+  },
+  fab: {
+    justifyContent: "center",
+    alignItems: "center",
+    width: "100%",
+    padding: 24,
+    position: "absolute",
+    bottom: 0,
   },
 });
