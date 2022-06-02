@@ -12,11 +12,18 @@ function ToggleItem({
   icon,
   label,
   isSelected,
+  style,
+  margin = false,
   ...otherProps
 }) {
   return (
     <TouchableHighlight
-      style={[styles.button, isSelected === true ? styles.selected : null]}
+      style={[
+        styles.button,
+        margin ? styles.margin : null,
+        style,
+        isSelected === true ? styles.selected : null,
+      ]}
       onPress={onPress}
       onPressIn={() => Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Heavy)}
       underlayColor={isSelected ? colors.primaryDark : colors.primaryLight}
@@ -79,6 +86,9 @@ const styles = StyleSheet.create({
   },
   unselectedLabel: {
     color: colors.grayDarkFaded,
+  },
+  margin: {
+    marginRight: 12,
   },
 });
 
