@@ -5,17 +5,19 @@ import { captureRef } from "react-native-view-shot";
 // expo libraries
 import { LinearGradient } from "expo-linear-gradient";
 import { StatusBar } from "expo-status-bar";
+import * as MediaLibrary from "expo-media-library";
 // styles
 import colors from "../config/colors";
 // custom components
 import Card from "../components/Card";
 import Divider from "../components/Divider";
-import IconCustom from "../components/IconCustom";
 import TextCustom from "../components/TextCustom";
+import ScreenshotView from "../components/ScreenshotView";
 // data
 import { UserData } from "../contexts/userdata";
 import Summary from "../components/Summary";
 import FabButtonCustom from "../components/FabButtonCustom";
+import MacroRow from "../components/MacroRow";
 
 export default function Step4({ navigation }) {
   const { numberWithDot, user, setTotalCalGoal } = useContext(UserData);
@@ -77,78 +79,30 @@ export default function Step4({ navigation }) {
 
   const fiberGrams = Math.round(totalGoalCalories / 100);
 
-  function useCapture() {
-    const screenshotView = useRef();
+  const screenshotView = useRef();
 
-    function onCapture() {
-      captureRef(screenshotView, {
-        format: "jpg",
-        quality: 0.9,
-      }).then(
-        (uri) => alert(uri),
-        (error) => alert("Oops, snapshot failed", error)
-      );
-    }
-
-    return {
-      screenshotView,
-      onCapture,
-    };
-  }
-
-  const { screenshotView, onCapture } = useCapture();
-
-  function MacroRow({
-    title,
-    grams,
-    kcal,
-    percentage,
-    ml,
-    iconName = "ic_placeholder",
-    iconColor = colors.primary,
-  }) {
-    return (
-      <View style={[styles.row, styles.horizontalCentered, styles.macrosBox]}>
-        <IconCustom
-          size={28}
-          name={iconName}
-          style={styles.macrosIcons}
-          color={iconColor}
-        />
-        <View style={styles.fillWidth}>
-          <View style={[styles.row, styles.spaceBetween]}>
-            <TextCustom fontWeight="Semi Bold" style={styles.macrosTitle}>
-              {title}
-            </TextCustom>
-            {grams && <TextCustom>{grams} g</TextCustom>}
-            {ml && <TextCustom>{numberWithDot(waterGrams(ml))} ml</TextCustom>}
-          </View>
-          {kcal && percentage && (
-            <View style={[styles.row, styles.spaceBetween]}>
-              <TextCustom style={styles.macrosSubtitle}>
-                {numberWithDot(kcal)} kcal
-              </TextCustom>
-              <TextCustom style={styles.macrosSubtitle}>
-                {Math.round(percentage)} %
-              </TextCustom>
-            </View>
-          )}
-        </View>
-      </View>
+  function onCapture() {
+    captureRef(screenshotView, {
+      format: "png",
+      quality: 1,
+      snapshotContentContainer: true,
+    }).then(
+      (uri) => MediaLibrary.saveToLibraryAsync(uri),
+      alert("Imagem Salva"),
+      (error) => alert("Ops, Sua Imagem Não Foi Salva", error)
     );
   }
 
   return (
     <SafeAreaView style={styles.container}>
-      <ScrollView contentContainerStyle={styles.list} ref={screenshotView}>
+      <ScrollView contentContainerStyle={styles.list}>
         <Summary backFunction={() => navigation.goBack()} />
-        {/* MACROS */}
         <Card padding={0}>
           <MacroRow
             title={"Proteínas"}
             iconName={"ic_chicken"}
             iconColor={"#FD7036"}
-            grams={proteinGrams}
+            value={proteinGrams}
             kcal={proteinCalories}
             percentage={proteinPercentage}
           />
@@ -157,7 +111,7 @@ export default function Step4({ navigation }) {
             title={"Gorduras"}
             iconName={"ic_peanuts"}
             iconColor={"#CA6F59"}
-            grams={fatGrams}
+            value={fatGrams}
             kcal={fatCalories}
             percentage={fatPercentage}
           />
@@ -166,28 +120,41 @@ export default function Step4({ navigation }) {
             title={"Carboidratos"}
             iconName={"ic_croissant"}
             iconColor={"#CC996D"}
-            grams={carbGrams}
+            value={carbGrams}
             kcal={carbsCalories}
             percentage={carbsPercentage}
           />
         </Card>
         <Card padding={0}>
-          {/* AGUA */}
           <MacroRow
             title={"Água"}
             iconName={"ic_water_cup"}
             iconColor={"#1EA5FC"}
-            ml={waterGrams()}
+            value={waterGrams()}
+            unit={"ml"}
           />
           <Divider />
-          {/* FIBRAS */}
           <MacroRow
             title={"Fibras"}
             iconName={"ic_apple"}
             iconColor={"#77EA7E"}
-            grams={fiberGrams}
+            value={fiberGrams}
           />
         </Card>
+        <ScreenshotView hidden={false} ref={screenshotView}>
+          <Card padding={0}>
+            <View style={styles.tableRow}>
+              <TextCustom>Taxa Metabólica Basal (TMB):</TextCustom>
+              <TextCustom>{user.tmb}</TextCustom>
+            </View>
+            <Divider />
+            <View style={styles.tableRow}>
+              <TextCustom>Gasto Energético Total (GET):</TextCustom>
+              <TextCustom>{user.tdee}</TextCustom>
+            </View>
+            <View style={styles.row}></View>
+          </Card>
+        </ScreenshotView>
       </ScrollView>
       <View>
         <LinearGradient
@@ -195,7 +162,7 @@ export default function Step4({ navigation }) {
           colors={colors.grayLightGradient}
           locations={[0, 0.5]}
         >
-          <FabButtonCustom onPress={() => onCapture()} icon={"ic_arrow"} />
+          <FabButtonCustom onPress={() => onCapture()} icon={"ic_download"} />
         </LinearGradient>
       </View>
       <StatusBar style="dark" />
@@ -211,6 +178,8 @@ const styles = StyleSheet.create({
   list: {
     padding: 24,
     paddingBottom: 72 + 48,
+    backgroundColor: colors.grayLight,
+    borderRadius: 46,
   },
   row: {
     flex: 1,
@@ -223,24 +192,8 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     alignItems: "baseline",
   },
-  macrosBox: {
-    padding: 24,
-    paddingLeft: 35,
-  },
   fillWidth: {
     flex: 1,
-  },
-  macrosIcons: {
-    marginRight: 35,
-  },
-  macrosTitle: {
-    fontSize: 20,
-  },
-  macrosSubtitle: {
-    fontSize: 14,
-    color: colors.grayDark,
-    marginTop: 4,
-    lineHeight: 16,
   },
   fab: {
     justifyContent: "center",
@@ -249,5 +202,11 @@ const styles = StyleSheet.create({
     padding: 24,
     position: "absolute",
     bottom: 0,
+  },
+  tableRow: {
+    flex: 1,
+    flexDirection: "row",
+    padding: 24,
+    justifyContent: "space-between",
   },
 });
