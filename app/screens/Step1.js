@@ -94,7 +94,7 @@ function Step1({ navigation }) {
       return "ic_gender";
     }
     if (user.height > 250 || user.weight > 300 || user.age > 110) {
-      return "ic_weight";
+      return "ic_edit";
     } else {
       return "ic_fire";
     }
@@ -177,7 +177,7 @@ function Step1({ navigation }) {
             <Header
               style={styles.colorPrimary}
               hasButton={true}
-              buttonIcon={"ic_plus"}
+              buttonIcon={"ic_info"}
               buttonAction={() => setModalVisible(true)}
             >
               Taxa Metabólica Basal
