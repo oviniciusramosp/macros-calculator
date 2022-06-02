@@ -27,6 +27,9 @@ import IconChicken from "../assets/icons/IconChicken";
 import IconCroissant from "../assets/icons/IconCroissant";
 import IconPeanuts from "../assets/icons/IconPeanuts";
 import IconWaterCup from "../assets/icons/IconWaterCup";
+import IconDownload from "../assets/icons/IconDownload";
+import IconEdit from "../assets/icons/IconEdit";
+import IconInfo from "../assets/icons/IconInfo";
 
 export default function IconCustom({
   color = colors.primary,
@@ -116,7 +119,25 @@ export default function IconCustom({
               />
             );
           // D
+          case "ic_download":
+            return (
+              <IconDownload
+                color={color}
+                size={size}
+                filled={filled}
+                rotate={rotate}
+              />
+            );
           // E
+          case "ic_edit":
+            return (
+              <IconEdit
+                color={color}
+                size={size}
+                filled={filled}
+                rotate={rotate}
+              />
+            );
           // F
           case "ic_face_serious":
             return (
@@ -184,6 +205,15 @@ export default function IconCustom({
               />
             );
           // I
+          case "ic_info":
+            return (
+              <IconInfo
+                color={color}
+                size={size}
+                filled={filled}
+                rotate={rotate}
+              />
+            );
           // J
           // K
           // L
