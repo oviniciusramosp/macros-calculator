@@ -8,8 +8,10 @@ import LoadingScreen from "../screens/LoadingScreen";
 function TextCustom({
   children,
   style,
+  hidden = false,
   color,
   fontSize,
+  marginBottom,
   fontWeight = "Regular",
   ...otherProps
 }) {
@@ -28,7 +30,9 @@ function TextCustom({
         fontWeight == "Semi Bold" ? styles.interSemiBold : styles.inter,
         { color: color },
         { fontSize: fontSize },
+        { marginBottom: marginBottom },
         style,
+        hidden ? styles.hidden : null,
       ]}
       {...otherProps}
     >
@@ -43,6 +47,12 @@ const styles = StyleSheet.create({
   },
   interSemiBold: {
     fontFamily: "InterSemiBold",
+  },
+  hidden: {
+    display: "none",
+  },
+  marginBottom: {
+    marginBottom: 12,
   },
 });
 
