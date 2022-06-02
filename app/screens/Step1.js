@@ -1,26 +1,22 @@
-import React, { useState, useContext, useEffect } from "react";
-import {
-  SafeAreaView,
-  ScrollView,
-  StyleSheet,
-  View,
-  Alert,
-} from "react-native";
-import AsyncStorage from "@react-native-async-storage/async-storage";
+// react
+import React, { useContext, useState, useEffect } from "react";
+import { SafeAreaView, ScrollView, StyleSheet, View } from "react-native";
 // expo libraries
-import { StatusBar } from "expo-status-bar";
 import { LinearGradient } from "expo-linear-gradient";
+import { StatusBar } from "expo-status-bar";
 // styles
 import colors from "../config/colors";
 // custom components
 import Card from "../components/Card";
-import Toggle from "../components/ToggleItem";
-import TextInputCustom from "../components/TextInputCustom";
-import Header from "../components/Header";
 import FabButtonCustom from "../components/FabButtonCustom";
-import TextCustom from "../components/TextCustom";
+import Header from "../components/Header";
 import IconCustom from "../components/IconCustom";
-
+import TextInputCustom from "../components/TextInputCustom";
+import TextCustom from "../components/TextCustom";
+import ToggleItem from "../components/ToggleItem";
+import ModalCustom from "../components/ModalCustom";
+import ButtonLarge from "../components/ButtonLarge";
+// data
 import { UserData } from "../contexts/userdata";
 
 function Step1({ navigation }) {
@@ -34,51 +30,94 @@ function Step1({ navigation }) {
     setUserTMB,
   } = useContext(UserData);
 
+  const [modalVisible, setModalVisible] = useState(false);
+
   var isNextButtonDisabled = true;
 
-  const maleTMB = Math.round(
-    //Mifflin (1990)
-    10 * user.weight + 6.25 * user.height - 5 * user.age + 5
-    // Harris Benedict (1919)
-    //66.5 + 13.75 * weight + 5.003 * height - 6.75 * age
-  );
-
-  const femaleTMB = Math.round(
-    //Mifflin (1990)
-    10 * user.weight + 6.25 * user.height - 5 * user.age - 161
-    // Harris Benedict (1919)
-    //655.1 + 9.563 * weight + 1.85 * height - 4.676 * age
-  );
-
-  function calculate() {
+  useEffect(() => {
     if (user.height > 0 && user.weight > 0 && user.age > 10) {
-      isNextButtonDisabled = false;
+      const maleTMB = Math.round(
+        //Mifflin (1990)
+        10 * user.weight + 6.25 * user.height - 5 * user.age + 5
+        // Harris Benedict (1919)
+        //66.5 + 13.75 * weight + 5.003 * height - 6.75 * age
+      );
+
+      const femaleTMB = Math.round(
+        //Mifflin (1990)
+        10 * user.weight + 6.25 * user.height - 5 * user.age - 161
+        // Harris Benedict (1919)
+        //655.1 + 9.563 * weight + 1.85 * height - 4.676 * age
+      );
       if (user.gender == "male") {
         setUserTMB(maleTMB);
       } else {
         setUserTMB(femaleTMB);
       }
-      return numberWithDot(user.tmb) + " kcal";
     } else {
       setUserTMB(0);
+    }
+  }, [user.weight, user.height, user.age, user.gender]);
+
+  function response() {
+    const selectGender = "Selecione um Gênero";
+    const fillForm = "Preencha os Campos";
+    const joke = "Eu sou uma piada para você?";
+    if (user.gender === "none") {
+      return selectGender;
+    }
+    if (
+      user.height > 250 ||
+      user.weight > 350 ||
+      user.age > 110 ||
+      (user.age > 0 && user.age < 10)
+    ) {
+      return joke;
+    }
+    if (
+      user.height < 1 ||
+      user.height == undefined ||
+      user.weight < 1 ||
+      user.weight == undefined ||
+      user.age < 1 ||
+      user.age == undefined
+    ) {
+      return fillForm;
+    } else {
+      isNextButtonDisabled = false;
+      return numberWithDot(user.tmb) + " kcal";
+    }
+  }
+
+  function showIcon() {
+    if (user.gender === "none") {
+      return "ic_gender";
+    }
+    if (user.height > 250 || user.weight > 300 || user.age > 110) {
+      return "ic_weight";
+    } else {
+      return "ic_fire";
     }
   }
 
   return (
     <SafeAreaView style={styles.container}>
-      <ScrollView contentContainerStyle={styles.list}>
+      <ScrollView
+        contentContainerStyle={styles.list}
+        keyboardShouldPersistTaps="handled"
+      >
         <View>
           {/* Gender */}
           <Card>
             <Header>Selecione seu Gênero</Header>
             <View style={styles.row}>
-              <Toggle
+              <ToggleItem
                 onPress={() => setUserGender("male")}
                 isSelected={user.gender == "male" ? true : false}
                 icon="ic_male"
+                margin={true}
               />
-              <View style={styles.margin} />
-              <Toggle
+              <ToggleItem
                 onPress={() => setUserGender("female")}
                 icon="ic_female"
                 isSelected={user.gender == "female" ? true : false}
@@ -135,49 +174,82 @@ function Step1({ navigation }) {
           </Card>
           {/* Taxa Metabólica Basal */}
           <Card>
-            <Header style={styles.colorPrimary}>Taxa Metabólica Basal</Header>
-
-            {user.gender === "none" ? (
-              <View style={styles.tbmContent}>
-                <View style={styles.tbmIcon}>
-                  <IconCustom
-                    name={"ic_gender"}
-                    color={colors.grayDark}
-                    size="28"
-                  />
-                </View>
-                <TextCustom fontWeight="Semi Bold" style={styles.tbmLabel}>
-                  Selecione um Gênero
+            <Header
+              style={styles.colorPrimary}
+              hasButton={true}
+              buttonIcon={"ic_plus"}
+              buttonAction={() => setModalVisible(true)}
+            >
+              Taxa Metabólica Basal
+            </Header>
+            <ModalCustom
+              visible={modalVisible}
+              closeButton={false}
+              onRequestClose={() => setModalVisible(false)}
+              closeButtonFunction={() => setModalVisible(false)}
+              style={styles.modalPicker}
+            >
+              <View style={styles.modalContent}>
+                <TextCustom marginBottom={24}>
+                  A Taxa Metabólica Basal (
+                  <TextCustom fontWeight="Semi Bold" color={colors.primary}>
+                    TMB
+                  </TextCustom>
+                  ) é a quantidade de energia necessária para a manutenção das
+                  funções vitais do organismo, como respiração, batimentos
+                  cardíacos e controle da temperatura corporal.
                 </TextCustom>
-              </View>
-            ) : user.height > 250 || user.weight > 300 || user.age > 110 ? (
-              <View style={styles.tbmContent}>
-                <View style={styles.tbmIcon}>
-                  <IconCustom name={"ic_face_serious"} size="28" />
-                </View>
-                <TextCustom fontWeight="Semi Bold" style={styles.tbmLabel}>
-                  Eu sou uma piada para você?
+                <TextCustom marginBottom={24}>
+                  O valor estima o gasto energético de um dia em total repouso.
                 </TextCustom>
+                <ButtonLarge onPress={() => setModalVisible(false)}>
+                  Fechar
+                </ButtonLarge>
               </View>
-            ) : user.height > 0 && user.weight > 0 && user.age > 10 ? (
-              <View style={styles.tbmContent}>
-                <View style={styles.tbmIcon}>
-                  <IconCustom name={"ic_fire"} size="28" />
-                </View>
-                <TextCustom fontWeight="Semi Bold" style={styles.tbmLabel}>
-                  {calculate()}
-                </TextCustom>
+            </ModalCustom>
+            <View style={styles.tbmContent}>
+              <View style={styles.tbmIcon}>
+                <IconCustom name={showIcon()} size="28" />
               </View>
-            ) : (
-              <View style={styles.tbmContent}>
-                <View style={styles.tbmIcon}>
-                  <TextCustom style={styles.emojiIcon}>🔥</TextCustom>
-                </View>
-                <TextCustom fontWeight="Semi Bold" style={styles.tbmLabel}>
-                  Preencha todos os Campos
-                </TextCustom>
-              </View>
-            )}
+              <TextCustom fontWeight="Semi Bold" style={styles.tbmLabel}>
+                {response()}
+              </TextCustom>
+              {/* <TextCustom
+                fontWeight="Semi Bold"
+                style={styles.tbmLabel}
+                hidden={
+                  user.gender == "none" ||
+                  (user.height > 0 && user.weight > 0 && user.age > 10)
+                    ? true
+                    : false
+                }
+              >
+                Preencha Todos os Campos
+              </TextCustom>
+              <TextCustom
+                fontWeight="Semi Bold"
+                style={styles.tbmLabel}
+                hidden={
+                  user.height > 250 || user.weight > 300 || user.age > 110
+                    ? false
+                    : true
+                }
+              >
+                Eu sou uma piada para você?
+              </TextCustom>
+              <TextCustom
+                fontWeight="Semi Bold"
+                style={styles.tbmLabel}
+                hidden={
+                  user.gender !== "none" ||
+                  (user.height > 0 && user.weight > 0 && user.age > 10)
+                    ? false
+                    : true
+                }
+              >
+                {calculate()}
+              </TextCustom> */}
+            </View>
           </Card>
         </View>
       </ScrollView>
@@ -257,6 +329,9 @@ const styles = StyleSheet.create({
   tbmLabel: {
     fontSize: 18,
     flex: 1,
+  },
+  modalContent: {
+    padding: 24,
   },
 });
 

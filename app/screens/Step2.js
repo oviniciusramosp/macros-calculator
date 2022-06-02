@@ -1,19 +1,23 @@
-import React, { useState, useContext } from "react";
+// react
+import React, { useState, useContext, useEffect } from "react";
 import { SafeAreaView, ScrollView, View, StyleSheet } from "react-native";
+// expo libraries
 import { StatusBar } from "expo-status-bar";
 import { LinearGradient } from "expo-linear-gradient";
+// styles
 import colors from "../config/colors";
+// custom components
 import Card from "../components/Card";
 import FabButtonCustom from "../components/FabButtonCustom";
 import Header from "../components/Header";
-import Toggle from "../components/ToggleItem";
+import ToggleItem from "../components/ToggleItem";
 import TextCustom from "../components/TextCustom";
 import NumberInputCustom from "../components/NumberInputCustom";
-
+// data
 import { UserData } from "../contexts/userdata";
+import Summary from "../components/Summary";
 
-function Step2({ route, navigation }) {
-  const {} = route.params;
+function Step2({ navigation }) {
   const { numberWithDot, user, setUserTDEE } = useContext(UserData);
 
   const [activityLevel, setActivityLevel] = useState("exercises");
@@ -22,97 +26,78 @@ function Step2({ route, navigation }) {
 
   var isNextButtonDisabled = true;
 
-  function calculateTDEE() {
+  useEffect(() => {
     if (activityLevel == "exercises") {
-      isNextButtonDisabled = false;
       if (exercisesPerWeek <= 1) {
         setUserTDEE(Math.floor(user.tmb * 1.2));
-        return numberWithDot(user.tdee) + " kcal";
       }
       if (exercisesPerWeek >= 2 && exercisesPerWeek <= 3) {
         setUserTDEE(Math.floor(user.tmb * 1.3));
-        return numberWithDot(user.tdee) + " kcal";
       }
       if (exercisesPerWeek >= 4 && exercisesPerWeek <= 6) {
         setUserTDEE(Math.floor(user.tmb * 1.42));
-        return numberWithDot(user.tdee) + " kcal";
       }
       if (exercisesPerWeek >= 7 && exercisesPerWeek <= 8) {
         setUserTDEE(Math.floor(user.tmb * 1.55));
-        return numberWithDot(user.tdee) + " kcal";
       }
       if (exercisesPerWeek >= 9 && exercisesPerWeek <= 10) {
         setUserTDEE(Math.floor(user.tmb * 1.8));
-        return numberWithDot(user.tdee) + " kcal";
       }
       if (exercisesPerWeek >= 11 && exercisesPerWeek <= 21) {
         setUserTDEE(Math.floor(user.tmb * 2));
-        return numberWithDot(user.tdee) + " kcal";
       }
       if (exercisesPerWeek >= 22) {
-        isNextButtonDisabled = true;
-        return "Fala sério!";
+        setUserTDEE(0);
       }
     }
     if (activityLevel == "calories") {
-      isNextButtonDisabled = false;
       setUserTDEE(Math.floor(user.tmb * 1.1 + caloriesPerDay * 1));
-      return numberWithDot(user.tdee) + " kcal";
-    } else {
+    }
+  }, [user.tmb, activityLevel, caloriesPerDay, exercisesPerWeek]);
+
+  function response() {
+    const joke = "Fala Sério!";
+    if (exercisesPerWeek > 22) {
       isNextButtonDisabled = true;
+      return joke;
+    } else {
+      isNextButtonDisabled = false;
+      return numberWithDot(user.tdee) + " kcal";
     }
   }
 
   function tdeeIcon() {
-    if (exercisesPerWeek < 22) {
-      if (user.gender == "male") {
-        return "🧔‍♂️";
-      }
-      if (user.gender == "female") {
-        return "👩";
-      }
-    } else {
+    if (activityLevel === "exercises" && exercisesPerWeek > 22) {
       return "🤡";
+    }
+    if (user.gender == "male") {
+      return "🧔‍♂️";
+    }
+    if (user.gender == "female") {
+      return "👩";
     }
   }
 
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView contentContainerStyle={styles.list}>
-        {/* Taxa Metabólica Basal */}
-        <Card>
-          <View style={styles.tbmContent}>
-            <FabButtonCustom
-              onPress={() => navigation.goBack()}
-              isEmoji={false}
-              size="small"
-              buttonStyle="outlined"
-              icon="ic_arrow"
-              iconRotate={180}
-            />
-            <View style={styles.margin} />
-            <View style={styles.margin} />
-            <TextCustom
-              fontWeight="Semi Bold"
-              style={[styles.tbmLabel, styles.colorPrimary]}
-            >
-              TMB{" "}
-            </TextCustom>
-            <TextCustom fontWeight="Semi Bold" style={styles.tbmLabel}>
-              {numberWithDot(user.tmb)} kcal
-            </TextCustom>
-          </View>
-        </Card>
+        {/* SUMMARY */}
+        <Summary
+          backFunction={() => navigation.goBack()}
+          hideGoal={true}
+          hideTDEE={true}
+        />
+        {/* ACTIVITY LEVEL */}
         <Card>
           <Header>Nível de Atividade</Header>
           <View style={styles.row}>
-            <Toggle
+            <ToggleItem
               onPress={() => setActivityLevel("exercises")}
               isSelected={activityLevel === "exercises" ? true : false}
               label="Exercícios"
+              margin={true}
             />
-            <View style={styles.margin} />
-            <Toggle
+            <ToggleItem
               onPress={() => setActivityLevel("calories")}
               isSelected={activityLevel === "calories" ? true : false}
               label="Calorias"
@@ -131,10 +116,7 @@ function Step2({ route, navigation }) {
             sufix={
               exercisesPerWeek != 1 ? "exercícios/semana" : "exercício/semana"
             }
-            style={[
-              styles.activityInput,
-              activityLevel != "exercises" ? styles.hide : null,
-            ]}
+            style={[activityLevel != "exercises" ? styles.hide : null]}
           />
           <NumberInputCustom
             maxLength={4}
@@ -144,20 +126,17 @@ function Step2({ route, navigation }) {
             sufix={"kcal/dia"}
             valueToAdd={50}
             maxValue={9999}
-            style={[
-              styles.activityInput,
-              activityLevel == "exercises" ? styles.hide : null,
-            ]}
+            style={[activityLevel == "exercises" ? styles.hide : null]}
           />
         </Card>
         <Card>
-          <Header style={styles.colorPrimary}>Gasto Calórico Diário</Header>
+          <Header color={colors.primary}>Gasto Energético Diário</Header>
           <View style={styles.tdeeContent}>
             <View style={styles.tdeeIcon}>
               <TextCustom style={styles.emojiIcon}>{tdeeIcon()}</TextCustom>
             </View>
             <TextCustom fontWeight="Semi Bold" style={styles.tdeeLabel}>
-              {calculateTDEE()}
+              {response()}
             </TextCustom>
           </View>
         </Card>
@@ -193,31 +172,6 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: "row",
   },
-  margin: {
-    height: 24,
-    width: 12,
-  },
-  tbmContent: {
-    flex: 1,
-    flexDirection: "row",
-    alignItems: "center",
-  },
-  tbmIcon: {
-    backgroundColor: colors.grayLight,
-    height: 52,
-    width: 52,
-    justifyContent: "center",
-    alignItems: "center",
-    borderRadius: 52,
-    marginRight: 24,
-  },
-  tbmLabel: {
-    fontSize: 18,
-    fontWeight: "600",
-  },
-  colorPrimary: {
-    color: colors.primary,
-  },
   tdeeContent: {
     flex: 1,
     flexDirection: "row",
@@ -243,10 +197,6 @@ const styles = StyleSheet.create({
     textAlign: "center",
     paddingHorizontal: 10,
     paddingVertical: 16,
-  },
-  activityInput: {
-    // width: 152,
-    // alignSelf: "center",
   },
   fab: {
     justifyContent: "center",

@@ -1,66 +1,57 @@
-import React from "react";
+// react
+import React, { useContext, useEffect } from "react";
 import { SafeAreaView, ScrollView, View, StyleSheet } from "react-native";
-import FabButtonCustom from "../components/FabButtonCustom";
-import TextCustom from "../components/TextCustom";
-import Card from "../components/Card";
-import Header from "../components/Header";
+// expo libraries
 import { StatusBar } from "expo-status-bar";
+// styles
 import colors from "../config/colors";
-import IconCustom from "../components/IconCustom";
+// custom components
+import Card from "../components/Card";
 import Divider from "../components/Divider";
+import IconCustom from "../components/IconCustom";
+import TextCustom from "../components/TextCustom";
+// data
+import { UserData } from "../contexts/userdata";
+import Summary from "../components/Summary";
 
-export default function Step4({ route, navigation }) {
-  const {
-    userTDEE,
-    userTMB,
-    userGender,
-    userStatus,
-    userGoal,
-    calories,
-    userWeight,
-    userAge,
-  } = route.params;
-
-  function caloriesWithDot(value) {
-    return value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
-  }
+export default function Step4({ navigation }) {
+  const { numberWithDot, user, setTotalCalGoal } = useContext(UserData);
 
   var totalGoalCalories = Math.round(userGoalCalories());
 
   function userGoalCalories() {
-    if (userGoal === 1) return userTDEE * 1 + calories * 1; // Superávit Específico
-    if (userGoal === 2) return userTDEE * 1.15; // Ganhar Peso Rápido
-    if (userGoal === 3) return userTDEE * 1.07; // Ganhar Peso
-    if (userGoal === 4) return userTDEE; // Manter Peso
-    if (userGoal === 5) return userTDEE * 0.85; // Perder Peso
-    if (userGoal === 6) return userTDEE * 0.7; // Perder Peso Rápido
-    if (userGoal === 7) return userTDEE * 1 - calories * 1; // Deficit Específico
+    if (user.goal === 0) return user.tdee * 1 + user.goalCalDifference * 1; // Superávit Específico
+    if (user.goal === 1) return user.tdee * 1.15; // Ganhar Peso Rápido
+    if (user.goal === 2) return user.tdee * 1.07; // Ganhar Peso
+    if (user.goal === 3) return user.tdee; // Manter Peso
+    if (user.goal === 4) return user.tdee * 0.85; // Perder Peso
+    if (user.goal === 5) return user.tdee * 0.7; // Perder Peso Rápido
+    if (user.goal === 6) return user.tdee * 1 - user.goalCalDifference * 1; // Deficit Específico
   }
 
   var proteinGrams = Math.round(pronteinInGrams());
   var proteinCalories = proteinGrams * 4;
   var proteinPercentage = (proteinCalories * 100) / totalGoalCalories;
   function pronteinInGrams() {
-    switch (userStatus) {
-      case 1:
+    switch (user.status) {
+      case 0:
         // Magro
-        return userGender === "female" ? userWeight * 1.8 : userWeight * 2;
-      case 2:
+        return user.gender === "female" ? user.weight * 1.8 : user.weight * 2;
+      case 1:
         // Falso Magro
-        console.log("chegou no 2");
-        return userGender === "female" ? userWeight * 2 : userWeight * 2.2;
-      case 3:
+        return user.gender === "female" ? user.weight * 2 : user.weight * 2.2;
+      case 2:
         // Em Forma
-        return userGender === "female" ? userWeight * 2.2 : userWeight * 2.6;
-      case 4:
+        return user.gender === "female" ? user.weight * 2.2 : user.weight * 2.6;
+      case 3:
         // Sobrepeso
-        return userWeight * 1.8;
+        return user.weight * 1.8;
       default:
         break;
     }
   }
 
-  var fatGrams = Math.round(userWeight * 0.8);
+  var fatGrams = Math.round(user.weight * 0.8);
   var fatCalories = fatGrams * 9;
   var fatPercentage = (fatCalories * 100) / totalGoalCalories;
 
@@ -71,13 +62,15 @@ export default function Step4({ route, navigation }) {
   var carbsPercentage = 100 - fatPercentage - proteinPercentage;
 
   function waterGrams() {
-    if (userAge <= 17) return userWeight * 40;
-    if (userAge >= 18 && userAge < 55) return userWeight * 35;
-    if (userAge >= 55 && userAge < 65) return userWeight * 30;
-    if (userAge >= 65) return userWeight * 25;
+    if (user.age <= 17) return user.weight * 40;
+    if (user.age >= 18 && user.age < 55) return user.weight * 35;
+    if (user.age >= 55 && user.age < 65) return user.weight * 30;
+    if (user.age >= 65) return user.weight * 25;
   }
 
-  const finalCaloriesCount = proteinCalories + fatCalories + carbsCalories;
+  useEffect(() => {
+    setTotalCalGoal(proteinCalories + fatCalories + carbsCalories);
+  }, [proteinCalories, fatCalories, carbsCalories]);
 
   const fiberGrams = Math.round(totalGoalCalories / 100);
 
@@ -98,20 +91,18 @@ export default function Step4({ route, navigation }) {
           style={styles.macrosIcons}
           color={iconColor}
         />
-        <View style={styles.fullWidth}>
+        <View style={styles.fillWidth}>
           <View style={[styles.row, styles.spaceBetween]}>
             <TextCustom fontWeight="Semi Bold" style={styles.macrosTitle}>
               {title}
             </TextCustom>
             {grams && <TextCustom>{grams} g</TextCustom>}
-            {ml && (
-              <TextCustom>{caloriesWithDot(waterGrams(ml))} ml</TextCustom>
-            )}
+            {ml && <TextCustom>{numberWithDot(waterGrams(ml))} ml</TextCustom>}
           </View>
           {kcal && percentage && (
             <View style={[styles.row, styles.spaceBetween]}>
               <TextCustom style={styles.macrosSubtitle}>
-                {caloriesWithDot(kcal)} kcal
+                {numberWithDot(kcal)} kcal
               </TextCustom>
               <TextCustom style={styles.macrosSubtitle}>
                 {Math.round(percentage)} %
@@ -126,54 +117,7 @@ export default function Step4({ route, navigation }) {
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView contentContainerStyle={styles.list}>
-        {/* SUMMARY */}
-        <Card>
-          <View style={[styles.row, styles.horizontalCentered]}>
-            <FabButtonCustom
-              onPress={() => navigation.goBack()}
-              isEmoji={false}
-              size="small"
-              buttonStyle="outlined"
-              icon="ic_arrow"
-              iconRotate={180}
-              style={styles.fabBack}
-            />
-            <View style={styles.row}>
-              <View style={styles.fullWidth}>
-                <TextCustom
-                  fontWeight="Semi Bold"
-                  color={colors.grayDark}
-                  fontSize={12}
-                >
-                  TMB
-                  {"\n"}
-                  GET
-                </TextCustom>
-                <TextCustom fontWeight="Semi Bold" fontSize={16}>
-                  Objetivo
-                </TextCustom>
-              </View>
-              <View style={styles.caloriesHeader}>
-                <TextCustom fontSize={12}>
-                  {caloriesWithDot(userTMB)} kcal
-                  {"\n"}
-                  {caloriesWithDot(userTDEE)} kcal
-                </TextCustom>
-                <TextCustom
-                  fontWeight="Semi Bold"
-                  color={colors.primary}
-                  fontSize={16}
-                >
-                  {caloriesWithDot(finalCaloriesCount)}
-                  <TextCustom fontWeight="Semi Bold" fontSize={12}>
-                    {" "}
-                    kcal
-                  </TextCustom>
-                </TextCustom>
-              </View>
-            </View>
-          </View>
-        </Card>
+        <Summary backFunction={() => navigation.goBack()} />
         {/* MACROS */}
         <Card padding={0}>
           <MacroRow
@@ -235,15 +179,9 @@ const styles = StyleSheet.create({
     padding: 24,
     paddingBottom: 72 + 48,
   },
-  fabBack: {
-    marginRight: 24,
-  },
   row: {
     flex: 1,
     flexDirection: "row",
-  },
-  caloriesHeader: {
-    alignItems: "flex-end",
   },
   horizontalCentered: {
     alignItems: "center",
@@ -252,15 +190,11 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     alignItems: "baseline",
   },
-  margin: {
-    height: 24,
-    width: 12,
-  },
   macrosBox: {
     padding: 24,
     paddingLeft: 35,
   },
-  fullWidth: {
+  fillWidth: {
     flex: 1,
   },
   macrosIcons: {
