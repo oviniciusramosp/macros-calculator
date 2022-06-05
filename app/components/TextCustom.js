@@ -12,6 +12,7 @@ function TextCustom({
   color,
   fontSize,
   marginBottom,
+  marginTop,
   fontWeight = "Regular",
   ...otherProps
 }) {
@@ -31,6 +32,7 @@ function TextCustom({
         { color: color },
         { fontSize: fontSize },
         { marginBottom: marginBottom },
+        { marginTop: marginTop },
         style,
         hidden ? styles.hidden : null,
       ]}
