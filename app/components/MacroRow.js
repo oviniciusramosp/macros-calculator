@@ -14,6 +14,8 @@ export default function MacroRow({
   kcal,
   percentage,
   unit = "g",
+  composition,
+  preciseFactor,
   iconName = "ic_placeholder",
   iconColor = colors.primary,
 }) {
@@ -29,25 +31,32 @@ export default function MacroRow({
       />
       <View style={styles.fillWidth}>
         <View style={[styles.row, styles.spaceBetween]}>
-          <TextCustom fontWeight="Semi Bold" fontSize={20}>
+          <TextCustom fontWeight="Semi Bold" fontSize={16}>
             {title}
           </TextCustom>
-          {value && (
+          {value ? (
             <TextCustom>
               {numberWithDot(value)} {unit}
             </TextCustom>
-          )}
+          ) : null}
         </View>
-        {kcal && percentage && (
+        {(kcal && percentage) || composition ? (
           <View style={[styles.row, styles.spaceBetween]}>
+            {kcal && percentage ? (
+              <TextCustom style={styles.macrosSubtitle}>
+                {numberWithDot(kcal)} kcal · {percentage}%
+              </TextCustom>
+            ) : (
+              <TextCustom />
+            )}
             <TextCustom style={styles.macrosSubtitle}>
-              {numberWithDot(kcal)} kcal
-            </TextCustom>
-            <TextCustom style={styles.macrosSubtitle}>
-              {Math.round(percentage)} %
+              {preciseFactor !== composition[0] && preciseFactor !== undefined
+                ? "~"
+                : null}
+              {numberWithDot(composition[0])} {composition[1]}
             </TextCustom>
           </View>
-        )}
+        ) : null}
       </View>
     </View>
   );
@@ -67,11 +76,11 @@ const styles = StyleSheet.create({
     alignItems: "baseline",
   },
   macrosBox: {
-    padding: 24,
-    paddingLeft: 35,
+    paddingVertical: 20,
+    paddingRight: 24,
   },
   macrosIcons: {
-    marginRight: 35,
+    marginRight: 24,
   },
   macrosSubtitle: {
     fontSize: 14,
