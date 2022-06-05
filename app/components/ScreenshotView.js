@@ -1,8 +1,11 @@
 import React from "react";
-import { StyleSheet, ScrollView } from "react-native";
+import { StyleSheet, ScrollView, View } from "react-native";
 
 const ScreenshotView = React.forwardRef((props, ref) => (
-  <ScrollView ref={ref} style={props.hidden && styles.hidden}>
+  <ScrollView
+    ref={ref}
+    style={[props.hidden && styles.view, props.hidden && styles.hidden]}
+  >
     {props.children}
   </ScrollView>
 ));
@@ -10,6 +13,10 @@ const ScreenshotView = React.forwardRef((props, ref) => (
 const styles = StyleSheet.create({
   view: {
     position: "absolute",
+    top: 0,
+    height: 0,
+    width: 400,
+    maxWidth: 400,
   },
   hidden: {
     opacity: 0,
