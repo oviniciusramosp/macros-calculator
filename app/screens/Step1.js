@@ -200,7 +200,6 @@ function Step1({ navigation }) {
         closeButton={false}
         onRequestClose={() => setModalVisible(false)}
         closeButtonFunction={() => setModalVisible(false)}
-        style={styles.modalPicker}
       >
         <View style={styles.modalContent}>
           <TextCustom marginBottom={24}>
