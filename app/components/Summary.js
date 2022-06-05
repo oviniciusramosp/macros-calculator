@@ -44,7 +44,7 @@ const Summary = ({ hideTDEE, hideGoal, backFunction }) => {
               GET
             </TextCustom>
             <TextCustom fontWeight="Semi Bold" fontSize={16} hidden={hideGoal}>
-              Objetivo
+              Meta
             </TextCustom>
           </View>
           {/* VALUES */}

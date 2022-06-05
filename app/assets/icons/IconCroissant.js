@@ -1,7 +1,12 @@
 import * as React from "react";
 import Svg, { Path, G } from "react-native-svg";
 
-export default function IconCroisant({ size = 24, color, filled, rotate = 0 }) {
+export default function IconCroissant({
+  size = 24,
+  color,
+  filled,
+  rotate = 0,
+}) {
   return (
     <Svg
       width={size}

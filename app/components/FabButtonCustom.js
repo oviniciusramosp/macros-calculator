@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { StyleSheet, TouchableHighlight, View } from "react-native";
 // third parties
 import { BlurView } from "expo-blur";
@@ -21,11 +21,17 @@ function FabButtonCustom({
   style,
   ...otherProps
 }) {
+  const [isPressing, setIsPressing] = useState(false);
+
   return (
     <BlurView style={styles.blur}>
       <TouchableHighlight
         onPress={onPress}
-        onPressIn={() => Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Heavy)}
+        onPressIn={() => (
+          Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Heavy),
+          setIsPressing(true)
+        )}
+        onPressOut={() => setIsPressing(false)}
         style={[
           styles.button,
           size === "small" ? styles.small : null,
@@ -54,6 +60,7 @@ function FabButtonCustom({
               size={28}
               name={icon}
               rotate={iconRotate}
+              filled={isPressing ? true : false}
               color={buttonStyle === "outlined" ? colors.primary : colors.white}
             />
           )}

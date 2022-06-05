@@ -4,7 +4,8 @@ export const UserData = createContext({});
 
 function UserDataProvider({ children }) {
   const numberWithDot = (value) => {
-    return value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+    // return value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+    return value.toLocaleString("pt-BR", { style: "decimal" });
   };
 
   const [userGender, setUserGender] = useState("none");
@@ -14,7 +15,11 @@ function UserDataProvider({ children }) {
   const [userTMB, setUserTMB] = useState(0);
   const [userTDEE, setUserTDEE] = useState(0);
   const [userStatus, setUserStatus] = useState();
-  const [userGoal, setUserGoal] = useState();
+  const [userGoal, setUserGoal] = useState({
+    id: null,
+    label: null,
+    icon: null,
+  });
   const [calDiference, setCalDiference] = useState(0);
   const [totalCalGoal, setTotalCalGoal] = useState(0);
 

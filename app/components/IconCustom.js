@@ -27,6 +27,12 @@ import IconChicken from "../assets/icons/IconChicken";
 import IconCroissant from "../assets/icons/IconCroissant";
 import IconPeanuts from "../assets/icons/IconPeanuts";
 import IconWaterCup from "../assets/icons/IconWaterCup";
+import IconDownload from "../assets/icons/IconDownload";
+import IconEdit from "../assets/icons/IconEdit";
+import IconInfo from "../assets/icons/IconInfo";
+import IconBread from "../assets/icons/IconBread";
+import IconCalendar from "../assets/icons/IconCalendar";
+import IconClose from "../assets/icons/IconClose";
 
 export default function IconCustom({
   color = colors.primary,
@@ -78,10 +84,28 @@ export default function IconCustom({
               />
             );
           // B
+          case "ic_bread":
+            return (
+              <IconBread
+                color={color}
+                size={size}
+                filled={filled}
+                rotate={rotate}
+              />
+            );
           // C
           case "ic_cake":
             return (
               <IconCake
+                color={color}
+                size={size}
+                filled={filled}
+                rotate={rotate}
+              />
+            );
+          case "ic_calendar":
+            return (
+              <IconCalendar
                 color={color}
                 size={size}
                 filled={filled}
@@ -106,6 +130,15 @@ export default function IconCustom({
                 rotate={rotate}
               />
             );
+          case "ic_close":
+            return (
+              <IconClose
+                color={color}
+                size={size}
+                filled={filled}
+                rotate={rotate}
+              />
+            );
           case "ic_croissant":
             return (
               <IconCroissant
@@ -116,7 +149,25 @@ export default function IconCustom({
               />
             );
           // D
+          case "ic_download":
+            return (
+              <IconDownload
+                color={color}
+                size={size}
+                filled={filled}
+                rotate={rotate}
+              />
+            );
           // E
+          case "ic_edit":
+            return (
+              <IconEdit
+                color={color}
+                size={size}
+                filled={filled}
+                rotate={rotate}
+              />
+            );
           // F
           case "ic_face_serious":
             return (
@@ -184,6 +235,15 @@ export default function IconCustom({
               />
             );
           // I
+          case "ic_info":
+            return (
+              <IconInfo
+                color={color}
+                size={size}
+                filled={filled}
+                rotate={rotate}
+              />
+            );
           // J
           // K
           // L

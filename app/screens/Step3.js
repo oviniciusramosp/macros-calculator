@@ -121,13 +121,13 @@ function Step3({ navigation }) {
           <Header>Objetivo</Header>
           <PickerCustom
             placeholder="Selecione seu Objetivo"
-            selectedValue={user.goal}
+            selectedValue={user.goal.id}
             options={pickerGoalOptions}
             onChangeSelect={(id) => {
-              setUserGoal(id);
+              setUserGoal(pickerGoalOptions[id]);
             }}
           />
-          {user.goal == 6 || user.goal == 0 ? (
+          {user.goal.id == 6 || user.goal.id == 0 ? (
             <NumberInputCustom
               maxLength={4}
               content={user.goalCalDifference}
@@ -148,7 +148,7 @@ function Step3({ navigation }) {
           locations={[0, 0.5]}
         >
           <FabButtonCustom
-            disabled={user.goal >= 0 && user.status >= 0 ? false : true}
+            disabled={user.goal.id >= 0 && user.status >= 0 ? false : true}
             onPress={() => navigation.navigate("Step 4", {})}
             icon={"ic_arrow"}
           />

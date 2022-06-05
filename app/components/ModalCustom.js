@@ -111,13 +111,16 @@ export default function ModalCustom({
             <View style={header ? styles.hasHeader : styles.noHeader}>
               {header && <Header style={styles.modalHeader}>{header}</Header>}
               {closeButton && (
-                <TouchableOpacity onPress={closeButtonFunction}>
-                  <IconCustom name={"ic_placeholder"} />
+                <TouchableOpacity
+                  style={styles.closeButtonArea}
+                  onPress={closeButtonFunction}
+                >
+                  <IconCustom name={"ic_close"} color={colors.grayDark} />
                 </TouchableOpacity>
               )}
             </View>
           ) : null}
-          <View style={styles.content}>{children}</View>
+          <>{children}</>
         </Animated.View>
         {/* Close modal on outside press */}
         <Pressable style={styles.closeArea} onPress={closeButtonFunction} />
@@ -136,6 +139,13 @@ const styles = StyleSheet.create({
   closeArea: {
     flex: 1,
     alignSelf: "stretch",
+  },
+  closeButtonArea: {
+    height: 52,
+    width: 52,
+    padding: 14,
+    right: -14,
+    top: -12,
   },
   modal: {
     width: width - 48,
@@ -167,5 +177,4 @@ const styles = StyleSheet.create({
     height: 24,
     padding: 24,
   },
-  content: {},
 });
