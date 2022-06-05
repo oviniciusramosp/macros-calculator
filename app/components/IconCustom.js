@@ -30,6 +30,9 @@ import IconWaterCup from "../assets/icons/IconWaterCup";
 import IconDownload from "../assets/icons/IconDownload";
 import IconEdit from "../assets/icons/IconEdit";
 import IconInfo from "../assets/icons/IconInfo";
+import IconBread from "../assets/icons/IconBread";
+import IconCalendar from "../assets/icons/IconCalendar";
+import IconClose from "../assets/icons/IconClose";
 
 export default function IconCustom({
   color = colors.primary,
@@ -81,10 +84,28 @@ export default function IconCustom({
               />
             );
           // B
+          case "ic_bread":
+            return (
+              <IconBread
+                color={color}
+                size={size}
+                filled={filled}
+                rotate={rotate}
+              />
+            );
           // C
           case "ic_cake":
             return (
               <IconCake
+                color={color}
+                size={size}
+                filled={filled}
+                rotate={rotate}
+              />
+            );
+          case "ic_calendar":
+            return (
+              <IconCalendar
                 color={color}
                 size={size}
                 filled={filled}
@@ -103,6 +124,15 @@ export default function IconCustom({
           case "ic_chicken":
             return (
               <IconChicken
+                color={color}
+                size={size}
+                filled={filled}
+                rotate={rotate}
+              />
+            );
+          case "ic_close":
+            return (
+              <IconClose
                 color={color}
                 size={size}
                 filled={filled}
