@@ -31,27 +31,20 @@ function Step1({ navigation }) {
   } = useContext(UserData);
 
   const [modalVisible, setModalVisible] = useState(false);
+  const [isNextButtonDisabled, setIsNextButtonDisabled] = useState(true);
 
-  var isNextButtonDisabled = true;
-
+  // Calculate TMB
   useEffect(() => {
     if (user.height > 0 && user.weight > 0 && user.age > 10) {
-      const maleTMB = Math.round(
-        //Mifflin (1990)
-        10 * user.weight + 6.25 * user.height - 5 * user.age + 5
-        // Harris Benedict (1919)
-        //66.5 + 13.75 * weight + 5.003 * height - 6.75 * age
-      );
-
-      const femaleTMB = Math.round(
-        //Mifflin (1990)
-        10 * user.weight + 6.25 * user.height - 5 * user.age - 161
-        // Harris Benedict (1919)
-        //655.1 + 9.563 * weight + 1.85 * height - 4.676 * age
-      );
       if (user.gender == "male") {
+        const maleTMB = Math.round(
+          10 * user.weight + 6.25 * user.height - 5 * user.age + 5
+        );
         setUserTMB(maleTMB);
       } else {
+        const femaleTMB = Math.round(
+          10 * user.weight + 6.25 * user.height - 5 * user.age - 161
+        );
         setUserTMB(femaleTMB);
       }
     } else {
@@ -59,22 +52,34 @@ function Step1({ navigation }) {
     }
   }, [user.weight, user.height, user.age, user.gender]);
 
-  function response() {
-    const selectGender = "Selecione um Gênero";
-    const fillForm = "Preencha os Campos";
-    const joke = "Eu sou uma piada para você?";
+  // Response Messages + Icon
+  const [response, setResponse] = useState({
+    label: "Selecione um Gênero",
+    icon: "ic_gender",
+  });
+  useEffect(() => {
+    // gender not selected
     if (user.gender === "none") {
-      return selectGender;
+      setIsNextButtonDisabled(true);
+      setResponse({ label: "Selecione um Gênero", icon: "ic_gender" });
+      return;
     }
-    if (
+    // exagerated numbers
+    else if (
       user.height > 250 ||
       user.weight > 350 ||
       user.age > 110 ||
       (user.age > 0 && user.age < 10)
     ) {
-      return joke;
+      setIsNextButtonDisabled(true);
+      setResponse({
+        label: "Eu sou uma piada para você?",
+        icon: "ic_face_serious",
+      });
+      return;
     }
-    if (
+    // low numbers
+    else if (
       user.height < 1 ||
       user.height == undefined ||
       user.weight < 1 ||
@@ -82,23 +87,20 @@ function Step1({ navigation }) {
       user.age < 1 ||
       user.age == undefined
     ) {
-      return fillForm;
-    } else {
-      isNextButtonDisabled = false;
-      return numberWithDot(user.tmb) + " kcal";
+      setIsNextButtonDisabled(true);
+      setResponse({ label: "Preencha os Campos", icon: "ic_edit" });
+      return;
     }
-  }
-
-  function showIcon() {
-    if (user.gender === "none") {
-      return "ic_gender";
+    // all valid
+    else {
+      setIsNextButtonDisabled(false);
+      setResponse({
+        label: numberWithDot(user.tmb) + " kcal",
+        icon: "ic_fire",
+      });
+      return;
     }
-    if (user.height > 250 || user.weight > 300 || user.age > 110) {
-      return "ic_edit";
-    } else {
-      return "ic_fire";
-    }
-  }
+  }, [user.weight, user.height, user.age, user.gender, user.tmb]);
 
   return (
     <SafeAreaView style={styles.container}>
@@ -182,77 +184,42 @@ function Step1({ navigation }) {
             >
               Taxa Metabólica Basal
             </Header>
-            <ModalCustom
-              visible={modalVisible}
-              closeButton={false}
-              onRequestClose={() => setModalVisible(false)}
-              closeButtonFunction={() => setModalVisible(false)}
-              style={styles.modalPicker}
-            >
-              <View style={styles.modalContent}>
-                <TextCustom marginBottom={24}>
-                  A Taxa Metabólica Basal (
-                  <TextCustom fontWeight="Semi Bold" color={colors.primary}>
-                    TMB
-                  </TextCustom>
-                  ) é a quantidade de energia necessária para a manutenção das
-                  funções vitais do organismo, como respiração, batimentos
-                  cardíacos e controle da temperatura corporal.
-                </TextCustom>
-                <TextCustom marginBottom={24}>
-                  O valor estima o gasto energético de um dia em total repouso.
-                </TextCustom>
-                <ButtonLarge onPress={() => setModalVisible(false)}>
-                  Fechar
-                </ButtonLarge>
-              </View>
-            </ModalCustom>
             <View style={styles.tbmContent}>
               <View style={styles.tbmIcon}>
-                <IconCustom name={showIcon()} size="28" />
+                <IconCustom name={response.icon} size="28" />
               </View>
               <TextCustom fontWeight="Semi Bold" style={styles.tbmLabel}>
-                {response()}
+                {response.label}
               </TextCustom>
-              {/* <TextCustom
-                fontWeight="Semi Bold"
-                style={styles.tbmLabel}
-                hidden={
-                  user.gender == "none" ||
-                  (user.height > 0 && user.weight > 0 && user.age > 10)
-                    ? true
-                    : false
-                }
-              >
-                Preencha Todos os Campos
-              </TextCustom>
-              <TextCustom
-                fontWeight="Semi Bold"
-                style={styles.tbmLabel}
-                hidden={
-                  user.height > 250 || user.weight > 300 || user.age > 110
-                    ? false
-                    : true
-                }
-              >
-                Eu sou uma piada para você?
-              </TextCustom>
-              <TextCustom
-                fontWeight="Semi Bold"
-                style={styles.tbmLabel}
-                hidden={
-                  user.gender !== "none" ||
-                  (user.height > 0 && user.weight > 0 && user.age > 10)
-                    ? false
-                    : true
-                }
-              >
-                {calculate()}
-              </TextCustom> */}
             </View>
           </Card>
         </View>
       </ScrollView>
+      <ModalCustom
+        visible={modalVisible}
+        closeButton={false}
+        onRequestClose={() => setModalVisible(false)}
+        closeButtonFunction={() => setModalVisible(false)}
+        style={styles.modalPicker}
+      >
+        <View style={styles.modalContent}>
+          <TextCustom marginBottom={24}>
+            A Taxa Metabólica Basal (
+            <TextCustom fontWeight="Semi Bold" color={colors.primary}>
+              TMB
+            </TextCustom>
+            ) é a quantidade de energia necessária para a manutenção das funções
+            vitais do organismo, como respiração, batimentos cardíacos e
+            controle da temperatura corporal.
+          </TextCustom>
+          <TextCustom marginBottom={24}>
+            O valor estima o gasto energético de um dia em total repouso.
+          </TextCustom>
+          <ButtonLarge onPress={() => setModalVisible(false)}>
+            Fechar
+          </ButtonLarge>
+        </View>
+      </ModalCustom>
       <View>
         <LinearGradient
           style={styles.fab}
