@@ -4,7 +4,7 @@ import React from "react";
 export default function LoadingScreen() {
   return (
     <View>
-      <Text>Loading...</Text>
+      <Text>...</Text>
     </View>
   );
 }
