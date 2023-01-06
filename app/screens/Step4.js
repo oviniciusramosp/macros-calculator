@@ -83,7 +83,7 @@ export default function Step4({ navigation }) {
   }, [user.goal, user.tdee, user.goalCalDifference]);
 
   // Calculate Proteins
-  var proteinFactor = 0;
+  let proteinFactor = 0;
   function calculateProteinGrams() {
     // Magro
     if (user.status == 0) {
@@ -110,22 +110,31 @@ export default function Step4({ navigation }) {
   );
 
   // Calculate Fat
-  const fatGrams = Math.round(user.weight * 0.8);
+  const fatFactor =
+    user.weight * 0.8 * 9 >= (user.totalCalGoal - proteinCalories) / 2
+      ? (user.totalCalGoal - proteinCalories) / 18 / user.weight
+      : 0.8;
+  const fatGrams = Math.round(user.weight * fatFactor);
   const fatCalories = fatGrams * 9;
   const fatPercentage = Math.round((fatCalories * 100) / user.totalCalGoal);
 
   // Calculate Carbs
-  const carbGrams = Math.round(
-    (user.totalCalGoal - fatCalories - proteinCalories) / 4
-  );
-  const carbsCalories = Math.round(
-    user.totalCalGoal - fatCalories - proteinCalories
-  );
-  const carbsPercentage = 100 - fatPercentage - proteinPercentage;
+  const carbGrams =
+    user.totalCalGoal - fatCalories - proteinCalories > 0
+      ? Math.round((user.totalCalGoal - fatCalories - proteinCalories) / 4)
+      : "0";
+  const carbsCalories =
+    user.totalCalGoal - fatCalories - proteinCalories > 0
+      ? Math.round(user.totalCalGoal - fatCalories - proteinCalories)
+      : "0";
+  const carbsPercentage =
+    100 - fatPercentage - proteinPercentage > 0
+      ? 100 - fatPercentage - proteinPercentage
+      : "0";
   const carbsFactor = Math.round((carbGrams / user.weight) * 10) / 10;
 
   // Calculate Water
-  var waterFactor = 0;
+  let waterFactor = 0;
   function waterGrams() {
     if (user.age <= 17) waterFactor = 40;
     if (user.age >= 18 && user.age < 55) waterFactor = 35;
@@ -295,7 +304,7 @@ export default function Step4({ navigation }) {
             value={fatGrams}
             kcal={fatCalories}
             percentage={fatPercentage}
-            composition={[0.8, "g/kg"]}
+            composition={[fatFactor, "g/kg"]}
           />
           <Divider />
           <TouchableOpacity onPress={() => setIsCarbModalVisible(true)}>
